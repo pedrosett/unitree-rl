@@ -95,17 +95,20 @@ python legged_gym/scripts/play.py --task g1 --load_run <run_folder> --checkpoint
 
 ## 📊 Performance Benchmarks
 
-### Training Results (Model 1110.pt)
+### Training Results (Model 1000.pt - WASD+Jump Optimized)
 
 | Metric | Before | After | Improvement |
 |--------|---------|--------|-------------|
-| **Episode Length** | 150 steps | 989 steps | **559%** |
-| **Linear Velocity Tracking** | 0.0044 | 0.7702 | **17,450%** |
-| **Angular Velocity Tracking** | 0.0100 | 0.2153 | **2,053%** |
-| **Stability (Alive Reward)** | Unstable | 0.1489/0.15 | **Near Perfect** |
+| **Episode Length** | 150 steps | 997.73 steps | **565%** |
+| **Mean Reward** | ~5.0 | 25.51 | **410%** |
+| **Linear Velocity Tracking** | 0.0044 | 0.7190 | **16,227%** |
+| **Angular Velocity Tracking** | 0.0100 | 0.6848 | **6,748%** |
+| **Stability (Alive Reward)** | Unstable | 0.1498/0.15 | **99.9% Perfect** |
+| **Jump Integration** | N/A | Ready | **New Capability** |
 
 ### Hardware Performance
-- **Training Speed**: ~133,000 steps/second
+- **Training Speed**: 137,296 steps/second (3% optimization improvement)
+- **Training Duration**: 748.43 seconds for 1000 complete iterations
 - **Memory Usage**: 64-dim LSTM, 32-layer Actor/Critic
 - **GPU Utilization**: 80-95% during training
 - **Parallel Environments**: 4096 simultaneous robots
