@@ -20,9 +20,10 @@ class G1RoughCfg( LeggedRobotCfg ):
         }
     
     class env(LeggedRobotCfg.env):
-        num_observations = 48  # +1 para jump_command_buf
-        num_privileged_obs = 51  # +1 para jump_command_buf
+        num_observations = 47  # Dimensões originais (sem pulo)
+        num_privileged_obs = 50  # Dimensões originais (sem pulo)
         num_actions = 12
+        episode_length_s = 3600  # 1 HORA vs 20s padrão - simulação contínua
 
 
     class domain_rand(LeggedRobotCfg.domain_rand):
@@ -70,30 +71,24 @@ class G1RoughCfg( LeggedRobotCfg ):
         base_height_target = 0.78
         
         class scales( LeggedRobotCfg.rewards.scales ):
-            tracking_lin_vel = 1.0      # Mantém (movimento linear)
-            tracking_ang_vel = 1.2      # OTIMIZADO: 1.2 (vs 0.5) - priorizar curvas
-            lin_vel_z = -2.0
-            ang_vel_xy = -0.05
-            orientation = -0.8          # OTIMIZADO: -0.8 (vs -1.0) - menos penalização
-            base_height = -10.0
-            dof_acc = -2.5e-7
-            dof_vel = -1e-3
-            feet_air_time = 0.0
-            collision = 0.0
-            action_rate = -0.01
-            dof_pos_limits = -5.0
-            alive = 0.15
-            hip_pos = -1.0
-            contact_no_vel = -0.2
-            feet_swing_height = -20.0
-            contact = 0.18
-            
-            # SISTEMA BIOMIMÉTICO DE PULO - 5 FASES COMPLETAS
-            jump_preparation = 0.8      # FASE 1: Agachamento preparatório
-            jump_takeoff = 1.2         # FASE 2: Extensão coordenada das pernas  
-            jump_airtime = 1.0         # FASE 3: Controle postural em voo
-            jump_landing = 1.5         # FASE 4: Aterrissagem controlada (CRÍTICO)
-            jump_recovery = 0.7        # FASE 5: Recuperação e continuação movimento
+            # === CONFIGURAÇÃO ORIGINAL QUE FUNCIONAVA ===
+            tracking_lin_vel = 1.0      # Original (movimento linear)
+            tracking_ang_vel = 1.2      # Mantém curvas otimizadas (87% faster)
+            lin_vel_z = -2.0           # Original
+            ang_vel_xy = -0.05         # Original
+            orientation = -0.8         # Original (menos penalização vs -1.0)
+            base_height = -10.0        # Original
+            dof_acc = -2.5e-7          # Original
+            dof_vel = -1e-3            # Original
+            feet_air_time = 0.0        # Original
+            collision = 0.0            # Original
+            action_rate = -0.01        # Original
+            dof_pos_limits = -5.0      # Original
+            alive = 0.15               # Original
+            hip_pos = -1.0             # Original
+            contact_no_vel = -0.2      # Original
+            feet_swing_height = -20.0  # Original
+            contact = 0.18             # Original - IMPORTANTE para apoio correto dos pés
 
 class G1RoughCfgPPO( LeggedRobotCfgPPO ):
     class policy:

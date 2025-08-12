@@ -67,28 +67,23 @@ def play(args):
     gym.subscribe_viewer_keyboard_event(viewer, gymapi.KEY_A, "cmd_left")
     gym.subscribe_viewer_keyboard_event(viewer, gymapi.KEY_D, "cmd_right")
     gym.subscribe_viewer_keyboard_event(viewer, gymapi.KEY_LEFT_SHIFT, "speed_boost")
-    gym.subscribe_viewer_keyboard_event(viewer, gymapi.KEY_SPACE, "cmd_jump")  # PULO
     
-    # Estados de comando - OTIMIZADO para curvas fechadas + PULO
-    vx, wz, jump_cmd = 0.0, 0.0, 0.0              
+    # Estados de comando - OTIMIZADO para caminhada responsiva
+    vx, wz = 0.0, 0.0              
     VX_BASE, WZ_BASE = 1.0, 1.5    # OTIMIZADO: WZ aumentado para curvas rápidas
     VX_FAST, WZ_FAST = 1.2, 2.0    # OTIMIZADO: WZ_FAST=2.0 para curvas fechadas
-    JUMP_IMPULSE = 15.0             # NOVO: Força do pulo vertical (ajustável)
     boost = False
     
     # Suavização OTIMIZADA (evita trancos, resposta mais rápida)
     vx_cmd, wz_cmd = 0.0, 0.0
     alpha = 0.3   # OTIMIZADO: 0.3 (vs 0.2) para 50% menos latência
     
-    def _apply_commands_to_env(_vx, _wz, _jump=0.0):
-        """Aplica comandos de velocidade e pulo ao ambiente"""
+    def _apply_commands_to_env(_vx, _wz):
+        """Aplica comandos de velocidade ao ambiente"""
         if hasattr(env, "commands"):
             env.commands[:, 0] = _vx   # vx (m/s) - frente/trás
             env.commands[:, 1] = 0.0   # vy (m/s) - lateral (zero para humanoide)
             env.commands[:, 2] = _wz   # yaw (rad/s) - rotação
-            # PULO BIOMIMÉTICO: Comando neural para aprendizado motor
-            if _jump > 0.0 and hasattr(env, 'set_jump_command'):
-                env.set_jump_command(_jump)
         else:
             print("Aviso: env.commands não encontrado - verifique a implementação")
     # --- fim setup WASD ---
@@ -111,8 +106,6 @@ def play(args):
                 wz = -1.0 if pressed else 0.0  # Girar direita
             elif e.action == "speed_boost":
                 boost = True if pressed else False
-            elif e.action == "cmd_jump":
-                jump_cmd = JUMP_IMPULSE if pressed else 0.0
         
         # Escala final levando em conta Shift
         VX = VX_FAST if boost else VX_BASE
@@ -122,8 +115,8 @@ def play(args):
         vx_cmd = (1 - alpha) * vx_cmd + alpha * (vx * VX)
         wz_cmd = (1 - alpha) * wz_cmd + alpha * (wz * WZ)
         
-        # Aplicar comandos ao ambiente (incluindo pulo)
-        _apply_commands_to_env(vx_cmd, wz_cmd, jump_cmd)
+        # Aplicar comandos ao ambiente
+        _apply_commands_to_env(vx_cmd, wz_cmd)
             
         try:
             actions = policy(obs.detach())
