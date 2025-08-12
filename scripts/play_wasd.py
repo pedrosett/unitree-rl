@@ -17,6 +17,7 @@ def play(args):
     env_cfg, train_cfg = task_registry.get_cfgs(name=args.task)
     # override some parameters for testing
     env_cfg.env.num_envs = 1  # Apenas 1 robô para WASD teleop
+    env_cfg.terrain.mesh_type = 'plane'  # Forçar plano simples (não terrain complexo)
     env_cfg.terrain.num_rows = 1  # Apenas 1 linha (terrain menor)
     env_cfg.terrain.num_cols = 1  # Apenas 1 coluna (terrain menor) 
     env_cfg.terrain.max_init_terrain_level = 0  # Forçar terrain level 0 (flat)
@@ -54,6 +55,11 @@ def play(args):
     # --- WASD Teleop • Setup (após criar policy, antes do loop) ---
     gym = env.gym
     viewer = env.viewer
+    
+    # Configurar câmera para foco no robô  
+    if viewer is not None:
+        # Posicionar câmera para melhor visualização do robô durante teleop
+        gym.viewer_camera_look_at(viewer, None, gymapi.Vec3(0, -2, 1.5), gymapi.Vec3(0, 0, 0.5))
     
     # Registrar teclas
     gym.subscribe_viewer_keyboard_event(viewer, gymapi.KEY_W, "cmd_forward")
@@ -111,10 +117,6 @@ def play(args):
         
         # Aplicar comandos ao ambiente
         _apply_commands_to_env(vx_cmd, wz_cmd)
-        
-        # Debug: mostrar comandos atuais (remover após teste)
-        if i % 60 == 0:  # A cada 60 frames
-            print(f"WASD: vx={vx_cmd:.2f}, wz={wz_cmd:.2f}, boost={boost}, i={i}")
             
         try:
             actions = policy(obs.detach())

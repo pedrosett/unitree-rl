@@ -424,14 +424,15 @@ WASD: vx=0.00, wz=0.00, boost=False, i=0
 
 ## 🔥 PRÓXIMOS PASSOS - Problemas Identificados
 
-### 1. 🏔️ **Problema: Múltiplos Tiles de Terrain**
-**Observado**: Simulação carregando muitos tiles de terreno, não apenas 1
-**Configuração Atual**: 
-- `env_cfg.terrain.num_rows = 1`
-- `env_cfg.terrain.num_cols = 1`
+### 1. ✅ **Problema Resolvido: Grid Visual vs Terrain Real**
+**Observado**: Grade 13x13 visual (não terrain real)
+**Investigação Realizada**: 
+- ✅ Configuração `num_rows=1, num_cols=1` aplicada corretamente
+- ✅ `mesh_type='plane'` - usando plano simples
+- ✅ `env.terrain não existe` - confirmado plane mode
 
-**Status**: ❌ Não aplicando corretamente
-**Ação necessária**: Investigar se configuração está sendo respeitada
+**Descoberta**: A grade 13x13 é o **grid visual do Isaac Gym viewer**, não terrain de simulação
+**Solução**: Câmera reposicionada para melhor foco no robô
 
 ### 2. ⚖️ **Problema CRÍTICO: Robô Não Equilibra**
 **Observado**: Episódios resetando constantemente devido à instabilidade
