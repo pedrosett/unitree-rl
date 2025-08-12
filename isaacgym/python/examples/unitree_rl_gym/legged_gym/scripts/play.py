@@ -86,9 +86,9 @@ def play(args):
             env.commands[:, 0] = _vx   # vx (m/s) - frente/trás
             env.commands[:, 1] = 0.0   # vy (m/s) - lateral (zero para humanoide)
             env.commands[:, 2] = _wz   # yaw (rad/s) - rotação
-            # PULO: Aplicar impulso vertical instantâneo
-            if _jump > 0.0 and hasattr(env, 'apply_vertical_impulse'):
-                env.apply_vertical_impulse(_jump)
+            # PULO BIOMIMÉTICO: Comando neural para aprendizado motor
+            if _jump > 0.0 and hasattr(env, 'set_jump_command'):
+                env.set_jump_command(_jump)
         else:
             print("Aviso: env.commands não encontrado - verifique a implementação")
     # --- fim setup WASD ---

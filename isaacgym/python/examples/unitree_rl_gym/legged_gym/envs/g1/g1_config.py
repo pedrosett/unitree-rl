@@ -20,8 +20,8 @@ class G1RoughCfg( LeggedRobotCfg ):
         }
     
     class env(LeggedRobotCfg.env):
-        num_observations = 47
-        num_privileged_obs = 50
+        num_observations = 48  # +1 para jump_command_buf
+        num_privileged_obs = 51  # +1 para jump_command_buf
         num_actions = 12
 
 
@@ -87,7 +87,13 @@ class G1RoughCfg( LeggedRobotCfg ):
             contact_no_vel = -0.2
             feet_swing_height = -20.0
             contact = 0.18
-            jump_height = 0.5           # NOVO: Reward para pulo (ESPAÇO)
+            
+            # SISTEMA BIOMIMÉTICO DE PULO - 5 FASES COMPLETAS
+            jump_preparation = 0.8      # FASE 1: Agachamento preparatório
+            jump_takeoff = 1.2         # FASE 2: Extensão coordenada das pernas  
+            jump_airtime = 1.0         # FASE 3: Controle postural em voo
+            jump_landing = 1.5         # FASE 4: Aterrissagem controlada (CRÍTICO)
+            jump_recovery = 0.7        # FASE 5: Recuperação e continuação movimento
 
 class G1RoughCfgPPO( LeggedRobotCfgPPO ):
     class policy:
