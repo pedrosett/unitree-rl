@@ -36,7 +36,29 @@ python legged_gym/scripts/play.py --task=g1
 
 # Load specific checkpoint
 python legged_gym/scripts/play.py --task=g1 --load_run=<run_folder> --checkpoint=<checkpoint_number>
+
+# IMPORTANT: Always run simulations in separate terminal and provide feedback
+# Example with latest G1 model (SUCCESSFUL WASD):
+cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
+python legged_gym/scripts/play.py --task g1 --load_run Aug12_12-51-21_ --checkpoint 1110 --num_envs 1
+
+# Next: Optimized training for tight turns (Aug 12, 2025)
+# New training with enhanced angular velocity limits and faster response
 ```
+
+### Simulation Testing Protocol
+**CRITICAL**: Claude should NEVER execute simulation commands directly. Instead:
+
+1. **Claude provides command**: Complete bash command ready to execute
+2. **User runs in separate terminal**: Copy-paste and execute command
+3. **User provides feedback**: Console output, behavior observations, errors
+4. **Claude analyzes results**: Based on user feedback, not direct execution
+
+**Rationale**: 
+- Isaac Gym simulations require interactive GUI focus
+- WASD keyboard controls need user input
+- Visual behavior assessment requires human observation
+- Long-running processes benefit from user monitoring
 
 ### Deployment
 ```bash
