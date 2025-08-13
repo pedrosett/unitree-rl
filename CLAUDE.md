@@ -139,47 +139,49 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 
 ## Architecture
 
-### Directory Structure
-- **models/**: Model versioning system
-  - **MODEL_REGISTRY.md**: Track all model versions and metrics
-  - **production/**: Production-ready models
-  - **testing/**: Models under test (A/D fix, etc)
-  - **experiments/**: Experimental versions
-- **isaacgym/**: Isaac Gym simulator installation
-  - **python/examples/unitree_rl_gym/**: Main project directory
-    - **legged_gym/**: Core RL framework
-      - **envs/**: Robot-specific environments (g1/, h1/, h1_2/, go2/)
-      - **scripts/**: Training (train.py) and testing (play.py)
-      - **utils/**: Task registry and helpers
-    - **deploy/**: Deployment configurations
-      - **deploy_mujoco/**: Sim2Sim validation
-      - **deploy_real/**: Real robot deployment (Python + C++)
-      - **pre_train/**: Pre-trained models
-    - **resources/robots/**: URDF models and meshes
-    - **logs/**: Training logs and checkpoints
+### Directory Structure (Updated for GR00T)
+- **README.md**: Documentação principal GR00T + Isaac Sim
+- **CLAUDE.md**: Este arquivo - workflow Isaac Lab + GR00T
+- **PLANO_EXECUTIVO_GROOT_WASD.md**: Checklist implementação
+- **MDs/**: Documentação organizada
+  - **old_research/**: 🚫 Era Isaac Gym (DEPRECADO)
+    - ***.md**: Guias Isaac Gym + PPO  
+    - **salto mortal/**: Pesquisa pulos
+    - ***.pdf**: Documentos antigos
+  - **README_OLD_RESEARCH.md**: Explicação organização
+- **IsaacLab/**: 🔄 Isaac Lab framework (será clonado)
+- **Isaac-GR00T/**: 🔄 GR00T N1.5 foundation model (será clonado)
+- **isaacgym/**: Sistema legacy Isaac Gym (manter para comparação)
+- **models/**: Modelos Isaac Gym (legacy)
 
-### Key Components
+### Key Components (GR00T Era)
 
-1. **Environment Classes**: Each robot has its own environment class inheriting from `BaseTask`
-   - Location: `legged_gym/envs/{robot_name}/{robot_name}_config.py`
-   - Defines observation/action spaces, rewards, domain randomization
+1. **Isaac Lab Framework**: Teleoperation and robotics learning
+   - Location: `IsaacLab/source/standalone/demos/teleoperation.py`
+   - Provides keyboard/gamepad input handling
+   - Task management for different robots
 
-2. **Training Pipeline**: PPO algorithm from rsl-rl library
-   - Entry point: `legged_gym/scripts/train.py`
-   - Config loading → Environment creation → PPO training loop
+2. **GR00T Foundation Model**: Pre-trained humanoid intelligence
+   - Location: `Isaac-GR00T/` 
+   - N1.5 model with locomotion behaviors
+   - Zero training required - inference only
 
-3. **Deployment Pipeline**: 
-   - Sim2Sim: Validates policies in MuJoCo before real deployment
-   - Sim2Real: Deploys to physical robots with safety checks
+3. **Isaac Sim Integration**: Physics simulation
+   - USD-based robot models
+   - Real-time visualization and validation
+   - GPU-accelerated simulation
 
-### Configuration System
+### Configuration System (GR00T Era)
 
-- **Robot Configs**: Python classes in `legged_gym/envs/{robot}/`
-  - `{robot}_config.py`: Environment configuration
-  - `{robot}.py`: Environment implementation
+- **Isaac Lab Tasks**: Robot environments in Isaac Lab
+  - `IsaacLab/source/extensions/omni.isaac.lab_tasks/`
+  - Task definitions for different robots
+  - Built-in teleoperation support
 
-- **Deployment Configs**: YAML files in `deploy/*/configs/`
-  - Control frequencies, gains, safety limits
+- **GR00T Configs**: Foundation model parameters  
+  - `Isaac-GR00T/configs/` - Model configurations
+  - Pre-trained weights and inference settings
+  - WASD to action mappings
 
 ## Important Notes
 
@@ -191,31 +193,31 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
   - Optimized: 8192 envs (85-90% GPU utilization)
   - Maximum: 16384 envs (95-100% GPU utilization, 16GB+ VRAM required)
 
-### Workflow Pattern
-1. Train policy with `train.py` (logs to `logs/` directory)
-2. Validate visually with `play.py`
-3. Test robustness with MuJoCo sim2sim
-4. Deploy to real robot with safety parameters
+### Workflow Pattern (GR00T Era)
+1. **Setup**: Install Isaac Sim + Isaac Lab + GR00T in `unitree-rl` environment
+2. **Test Isaac Lab**: Validate teleoperation framework with demos
+3. **Integrate GR00T**: Connect foundation model as policy backend
+4. **WASD Validation**: User tests W/S/A/D controls visually
+5. **No Training**: Only inference - GR00T has pre-trained behaviors
 
-### Model Checkpoints & Versioning
-- Saved in `logs/{robot_name}/{date_time}/` 
-- TensorBoard events for monitoring training
-- Load specific checkpoints with `--load_run` and `--checkpoint` flags
-- **Model Registry**: Check `models/MODEL_REGISTRY.md` for:
-  - Production models (e.g., Aug12_16-59-06_/model_1000.pt)
-  - Testing models (e.g., A/D responsiveness fixes)
-  - Naming convention: `{FEATURE}_{VARIANT}_v{MAJOR}.{MINOR}`
+### GR00T Model Management
+- **Foundation Model**: GR00T N1.5 pre-trained weights
+- **Zero Training**: No checkpoints, no training logs
+- **Isaac Lab Integration**: GR00T as policy backend
+- **Legacy System**: Keep Isaac Gym for comparison
+  - Previous model: `Aug12_16-59-06_/model_1000.pt`
 
-### Common Modifications
-- **Reward tuning**: Edit reward scales in `{robot}_config.py`
-  - Current focus: `tracking_ang_vel = 2.5` for A/D responsiveness
-  - `action_rate = -0.005` for faster response
-- **Observation space**: Modify `_get_obs()` in environment class
-- **Domain randomization**: Adjust ranges in config classes
-- **Action space**: Change `num_actions` and action scaling
+### GR00T Integration Notes
+- **No Reward Tuning**: GR00T is pre-trained, no reward functions needed
+- **WASD Mapping**: Configure keyboard inputs in Isaac Lab
+  - W/S: Forward/backward locomotion commands
+  - A/D: Left/right turning commands
+- **Task Configuration**: Isaac Lab task setup for Unitree G1
+- **Model Loading**: GR00T N1.5 weights and inference configuration
 
-### Dependencies
-- Isaac Gym (proprietary, must be installed from NVIDIA)
-- rsl-rl (PPO implementation)
-- PyTorch 2.3.1 with CUDA
-- MuJoCo 3.2.3 (for sim2sim validation)
+### Dependencies (Updated)
+- **Isaac Sim 5.0.0**: Main simulation platform (via pip)
+- **Isaac Lab**: Teleoperation framework (from source)
+- **GR00T N1.5**: Foundation model (from source)  
+- **PyTorch 2.4.1**: Already installed in unitree-rl
+- **Legacy Isaac Gym**: Kept for comparison

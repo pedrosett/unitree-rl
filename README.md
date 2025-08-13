@@ -242,64 +242,62 @@ python train.py --task g1 --max_iterations 1000 --headless --num_envs 8192
 python train.py --task g1 --max_iterations 1000 --headless --num_envs 16384
 ```
 
-## 🏗️ Architecture
+## 🏗️ Arquitetura Repositório
 
-### Core Components
+### Estrutura Focada em GR00T
 
 ```
-unitree_rl/
-├── 📜 README.md                 # This file
-├── 📋 CLAUDE.md                 # Development guidelines  
-├── 📊 MDs/                      # Documentation
-│   ├── Sistema_Final_WASD_Caminhada_G1.md # 🆕 **FINAL SYSTEM - PRODUCTION READY**
-│   ├── Implementacao_WASD_Teleop_G1.md    # Development history
-│   ├── salto mortal/                      # Jump research documentation
-│   ├── 1_setup_ubuntu_isaac_conda.md      # Environment setup
-│   └── salto mortal/            # Jump research documentation
-├── 📁 models/                   # Model versioning system
-│   ├── MODEL_REGISTRY.md       # Model tracking and metrics
-│   ├── production/              # Production-ready models
-│   ├── testing/                 # Models under test
-│   └── experiments/             # Experimental versions
-├── 🎮 isaacgym/                 # Isaac Gym Preview 4 (complete)
-│   ├── assets/                  # Robot models, textures, environments
-│   ├── python/                  # Core framework
-│   │   └── examples/unitree_rl_gym/        # Main project
-│   │       ├── legged_gym/      # RL framework
-│   │       │   ├── envs/        # Robot environments (G1, H1, Go2)
-│   │       │   ├── scripts/     # Training & teleoperation
-│   │       │   └── utils/       # Helper functions
-│   │       ├── deploy/          # Real robot deployment
-│   │       └── resources/       # Additional robot assets
-└── 🚫 .gitignore                # Excludes logs, cache, binaries
+unitree_rl/                      # Repo principal
+├── 📜 README.md                 # Este arquivo (GR00T focus)
+├── 📋 CLAUDE.md                 # Workflow Isaac Lab + GR00T
+├── 📊 PLANO_EXECUTIVO_GROOT_WASD.md  # Checklist implementação
+├── 📁 MDs/                      # Documentação
+│   ├── old_research/            # 🚫 Era Isaac Gym (DEPRECADO)
+│   │   ├── *.md                # Guias Isaac Gym + PPO  
+│   │   ├── salto mortal/       # Pesquisa pulos
+│   │   └── *.pdf               # Documentos antigos
+│   └── README_OLD_RESEARCH.md  # Explicação organização
+├── 🔄 IsaacLab/                # Isaac Lab (será clonado)
+├── 🔄 Isaac-GR00T/             # GR00T N1.5 (será clonado)
+├── 📁 models/                  # Modelos Isaac Gym (legacy)
+├── 🎮 isaacgym/                # Isaac Gym (legacy, manter)
+│   └── python/examples/unitree_rl_gym/  # Sistema antigo
+└── 🚫 .gitignore               # Excludes logs, cache, binaries
 ```
 
-### Current Training Focus - A/D Responsiveness Fix
+### Repositórios Externos (clonados aqui)
+- **IsaacLab/**: Framework principal de teleoperação  
+- **Isaac-GR00T/**: Foundation model N1.5
+- **isaacgym/**: Sistema legacy (manter para comparação)
+
+### GR00T Integration Status
 
 ```python
-# Optimized for tight turns and responsive movement
-tracking_lin_vel = 1.0      # Linear movement tracking
-tracking_ang_vel = 2.5      # INCREASED for A/D responsiveness (was 1.2)
-action_rate = -0.005        # REDUCED for faster changes (was -0.01)
-alive = 0.15               # Stability maintenance
+# NEW APPROACH: Zero training, GR00T inference only
+foundation_model = "groot_n15"     # Pre-trained foundation model
+control_method = "isaac_lab"       # Isaac Lab teleoperation framework  
+input_device = "keyboard"          # WASD controls
+target_robot = "unitree_g1"        # Humanoid focus
+simulation = "isaac_sim"           # Physics validation
 
-# GPU Optimization
-num_envs = 8192            # 85-90% GPU utilization (vs 4096 = 63%)
+# NO MORE RL TRAINING - GR00T has pre-trained behaviors
 ```
 
-## 🎛️ Configuration
+## 🎛️ Configuração GR00T
 
-### WASD Parameters (Optimized for Responsiveness)
+### Parâmetros WASD Simples
 
 ```python
-# Enhanced turning dynamics  
-VX_BASE, WZ_BASE = 1.0, 1.5    # 87% faster than standard (0.8, 0.8)
-VX_FAST, WZ_FAST = 1.2, 2.0    # Speed boost mode
-alpha = 0.3                     # 50% reduced input latency
+# GR00T WASD mapping (to be implemented)
+W_key = "move_forward"         # GR00T forward locomotion
+S_key = "move_backward"        # GR00T backward locomotion  
+A_key = "turn_left"           # GR00T left turn
+D_key = "turn_right"          # GR00T right turn
 
-# Model versioning for easy testing
-# Check models/MODEL_REGISTRY.md for available versions
-# Example: python play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000
+# Isaac Lab device configuration
+teleop_device = "keyboard"     # Input method
+control_frequency = 60         # Hz
+isaac_sim_physics = "gpu"      # GPU acceleration
 ```
 
 ## 🔬 Scientific Background
