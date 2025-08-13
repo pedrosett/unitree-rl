@@ -71,9 +71,9 @@ class G1RoughCfg( LeggedRobotCfg ):
         base_height_target = 0.78
         
         class scales( LeggedRobotCfg.rewards.scales ):
-            # === CONFIGURAÇÃO ORIGINAL QUE FUNCIONAVA ===
+            # === CONFIGURAÇÃO TESTE A/D FIX - 200 STEPS ===
             tracking_lin_vel = 1.0      # Original (movimento linear)
-            tracking_ang_vel = 1.2      # Mantém curvas otimizadas (87% faster)
+            tracking_ang_vel = 2.5      # AUMENTADO: Foco em responsividade A/D (was 1.2)
             lin_vel_z = -2.0           # Original
             ang_vel_xy = -0.05         # Original
             orientation = -0.8         # Original (menos penalização vs -1.0)
@@ -82,7 +82,7 @@ class G1RoughCfg( LeggedRobotCfg ):
             dof_vel = -1e-3            # Original
             feet_air_time = 0.0        # Original
             collision = 0.0            # Original
-            action_rate = -0.01        # Original
+            action_rate = -0.005       # REDUZIDO: Permite mudanças mais rápidas (was -0.01)
             dof_pos_limits = -5.0      # Original
             alive = 0.15               # Original
             hip_pos = -1.0             # Original

@@ -2,31 +2,86 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview
+## Project Overview - ISAAC SIM MIGRATION 🚀
 
-This is a reinforcement learning (RL) framework for training Unitree robots (Go2, G1, H1, H1_2) using Isaac Gym simulation. The project implements a complete pipeline from simulation training to real robot deployment.
+**MAJOR TRANSITION**: This project is migrating from Isaac Gym to NVIDIA Isaac Sim + Isaac Lab + GR00T integration for next-generation humanoid robot control.
+
+### Current State
+- **Legacy System**: Isaac Gym with PPO training (deprecated but functional)
+- **Target System**: Isaac Sim 5.0.0 + Isaac Lab + GR00T N1.5 foundation model
+- **Migration Focus**: Unitree G1 humanoid robot with keyboard/gamepad teleoperation
+
+### New Architecture (Isaac Sim + Isaac Lab)
+- **Simulation**: NVIDIA Isaac Sim 5.0.0 (Omniverse USD-based)
+- **Framework**: Isaac Lab (GPU-accelerated robotics learning)
+- **AI Foundation**: GR00T N1.5 (pre-trained humanoid behaviors)  
+- **Control**: Keyboard teleoperation → Future gamepad integration
+- **Target Robot**: Unitree G1 humanoid (primary focus)
 
 ## Development Commands
 
-### Environment Setup
-```bash
-# Activate conda environment
-conda activate unitree-rl
+### Environment Setup - Isaac Sim Migration
 
-# If environment doesn't exist:
-conda create -n unitree-rl python=3.8
-conda activate unitree-rl
-cd isaacgym/python && pip install -e .
-cd examples/unitree_rl_gym && pip install -e .
+### 📂 PADRÃO DE ORGANIZAÇÃO OBRIGATÓRIO
+**TODOS os repos externos devem ser clonados DENTRO de `/home/pedro_setubal/Workspaces/unitree_rl/`**
+
+Exemplo isaacgym (já existente):
+- ✅ `/home/pedro_setubal/Workspaces/unitree_rl/isaacgym/`
+
+Novos repos devem seguir o mesmo padrão:
+- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/`
+- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/Isaac-GR00T/`
+
+#### AMBIENTE EXISTENTE: unitree-rl (USAR ESTE)
+```bash
+# Usar ambiente existente (NÃO criar novo)
+conda activate unitree-rl  # Python 3.8.20 + GLIBC 2.39
+
+# Instalar Isaac Sim no ambiente existente
+pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
+
+# Isaac Lab from source (DENTRO DO REPO unitree_rl)
+cd /home/pedro_setubal/Workspaces/unitree_rl
+git clone https://github.com/isaac-sim/IsaacLab.git
+cd IsaacLab && ./isaaclab.sh --install
+
+# GR00T N1.5 (DENTRO DO REPO unitree_rl)
+cd /home/pedro_setubal/Workspaces/unitree_rl
+git clone https://github.com/NVIDIA/Isaac-GR00T.git
+cd Isaac-GR00T && pip install -e .
 ```
 
-### Training
+#### SISTEMA ISAAC GYM (MANTER PARA COMPARAÇÃO)
 ```bash
-# Train a robot policy (from unitree_rl_gym directory)
-python legged_gym/scripts/train.py --task=g1  # Options: go2, g1, h1, h1_2
+# ✅ FUNCIONAL - Manter para comparação com GR00T
+conda activate unitree-rl  # Mesmo ambiente
+cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
+# Modelo WASD atual disponível para testes
+```
 
-# Resume training from checkpoint
-python legged_gym/scripts/train.py --task=g1 --resume --load_run=<run_folder> --checkpoint=<checkpoint_number>
+### Isaac Lab Teleoperation + GR00T (FOCO PRINCIPAL)
+
+#### NOVA ABORDAGEM: Isaac Lab + GR00T (SEM TRAINING)
+```bash
+# Ativar ambiente Isaac Lab
+conda activate isaac-lab-groot
+
+# Isaac Lab teleoperation com keyboard
+cd IsaacLab
+./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
+
+# Target: Unitree G1 teleoperation
+./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Humanoid-Unitree-G1-v0 --teleop_device keyboard
+
+# Isaac Lab + GR00T integration (meta)
+./isaaclab.sh -p scripts/groot_teleop.py --robot unitree_g1 --policy groot_n15 --device keyboard --sim_device cuda
+```
+
+#### SISTEMA DEPRECIADO: Isaac Gym (REMOVIDO)
+```bash
+# ⚠️ COMPLETAMENTE DEPRECIADO
+# Não usamos mais treinamento RL/PPO
+# Apenas GR00T inference via Isaac Lab
 ```
 
 ### Testing and Visualization
@@ -85,6 +140,11 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 ## Architecture
 
 ### Directory Structure
+- **models/**: Model versioning system
+  - **MODEL_REGISTRY.md**: Track all model versions and metrics
+  - **production/**: Production-ready models
+  - **testing/**: Models under test (A/D fix, etc)
+  - **experiments/**: Experimental versions
 - **isaacgym/**: Isaac Gym simulator installation
   - **python/examples/unitree_rl_gym/**: Main project directory
     - **legged_gym/**: Core RL framework
@@ -123,10 +183,13 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 
 ## Important Notes
 
-### GPU Requirements
+### GPU Requirements & Optimization
 - Requires NVIDIA GPU with CUDA support
 - Recommended: Driver 525+ for Isaac Gym compatibility
-- Training uses GPU-accelerated parallel environments (typically 4096+)
+- Training uses GPU-accelerated parallel environments:
+  - Default: 4096 envs (63% GPU utilization)
+  - Optimized: 8192 envs (85-90% GPU utilization)
+  - Maximum: 16384 envs (95-100% GPU utilization, 16GB+ VRAM required)
 
 ### Workflow Pattern
 1. Train policy with `train.py` (logs to `logs/` directory)
@@ -134,13 +197,19 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 3. Test robustness with MuJoCo sim2sim
 4. Deploy to real robot with safety parameters
 
-### Model Checkpoints
+### Model Checkpoints & Versioning
 - Saved in `logs/{robot_name}/{date_time}/` 
 - TensorBoard events for monitoring training
 - Load specific checkpoints with `--load_run` and `--checkpoint` flags
+- **Model Registry**: Check `models/MODEL_REGISTRY.md` for:
+  - Production models (e.g., Aug12_16-59-06_/model_1000.pt)
+  - Testing models (e.g., A/D responsiveness fixes)
+  - Naming convention: `{FEATURE}_{VARIANT}_v{MAJOR}.{MINOR}`
 
 ### Common Modifications
 - **Reward tuning**: Edit reward scales in `{robot}_config.py`
+  - Current focus: `tracking_ang_vel = 2.5` for A/D responsiveness
+  - `action_rate = -0.005` for faster response
 - **Observation space**: Modify `_get_obs()` in environment class
 - **Domain randomization**: Adjust ranges in config classes
 - **Action space**: Change `num_actions` and action scaling

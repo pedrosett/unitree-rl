@@ -286,26 +286,35 @@ python legged_gym/scripts/play.py --task g1 --load_run -1 --checkpoint -1
 ```
 
 ### 🚨 PROTOCOLO DE TESTE CLAUDE-USER
-**IMPORTANTE**: Claude NUNCA executa simulações diretamente. Protocolo obrigatório:
+**IMPORTANTE**: Claude NUNCA executa simulações ou treinos diretamente. Protocolo obrigatório:
 
 1. **Claude fornece comando completo**:
    ```bash
+   # Para simulação/teste:
    cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym && python legged_gym/scripts/play.py --task g1 --load_run Aug12_10-26-07_ --checkpoint 110 --num_envs 1
+   
+   # Para treinamento:
+   cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym && python legged_gym/scripts/train.py --task g1 --max_iterations 200 --headless --num_envs 8192
    ```
 
 2. **Usuário executa em terminal separado** e observa:
-   - Console output (debug messages, erros)
-   - Comportamento visual do robô
-   - Responsividade WASD
+   - Console output (debug messages, erros, training progress)
+   - Comportamento visual do robô (para simulação)
+   - Responsividade WASD (para teste)
+   - GPU utilization (para treino)
 
 3. **Usuário fornece feedback completo**:
    - Saída do console (copy-paste)
    - Observações visuais 
    - Problemas identificados
+   - Métricas de treinamento
 
 4. **Claude analisa e propõe soluções** baseado no feedback
 
-**Justificativa**: Isaac Gym requer interação GUI, foco de teclado e avaliação visual humana.
+**Justificativa**: 
+- Isaac Gym requer interação GUI e foco de teclado
+- Treinamentos longos precisam monitoramento humano
+- Avaliação visual é essencial para validação
 
 ## Troubleshooting
 
@@ -843,7 +852,34 @@ ls -la logs/g1/Aug11_15-13-56_/
 
 ## 🚀 **SESSÃO DE TREINAMENTO 12 AGOSTO 2025 - RESULTADOS CIENTÍFICOS**
 
-### 🎯 **EXPERIMENTO 3: WASD+PULO Otimizado 1000 Iterações (REVOLUÇÃO COMPLETA)**
+### 🔧 **TREINAMENTO A/D FIX - CONFIGURAÇÃO ATUAL**
+
+### **Problema Identificado**
+- Modelo Aug12_16-59-06_/model_1000.pt não responde adequadamente aos comandos A/D
+- Curvas lentas e com raio grande
+- Necessário treino focado em responsividade angular
+
+### **Configurações Otimizadas**
+```python
+# g1_config.py - Ajustes para A/D responsiveness
+tracking_ang_vel = 2.5      # AUMENTADO de 1.2 (foco em curvas)
+action_rate = -0.005        # REDUZIDO de -0.01 (mudanças mais rápidas)
+num_envs = 8192            # GPU 85-90% (vs 4096 = 63%)
+```
+
+### **Comando de Treinamento**
+```bash
+cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
+python legged_gym/scripts/train.py --task g1 --max_iterations 200 --headless --num_envs 8192
+```
+
+### **Expectativas**
+- 200 steps para teste inicial
+- GPU utilização ~85-90%
+- Melhoria em rew_tracking_ang_vel
+- Curvas mais fechadas e responsivas
+
+## 🎯 **EXPERIMENTO 3: WASD Otimizado 1000 Iterações (MODELO DE PRODUÇÃO)**
 
 **Timeline Executada:**
 - **Início**: Novo treinamento do zero com configurações otimizadas
@@ -958,7 +994,44 @@ python train.py --task g1 --resume --load_run Aug12_12-51-21_ --checkpoint 1110 
 2. **Se insuficiente**: Novo treinamento com pulo integrado
 3. **Comparar resultados** lado a lado
 
-## 🧪 **IMPLEMENTAÇÃO PULO (TECLA ESPAÇO)**
+## 📁 **SISTEMA DE VERSIONAMENTO DE MODELOS**
+
+### **Estrutura Implementada**
+```
+models/
+├── MODEL_REGISTRY.md       # Registro central com métricas
+├── production/              # Modelos prontos para produção
+│   └── WASD_Natural_v1.0 → Aug12_16-59-06_/model_1000.pt
+├── testing/                 # Modelos em teste
+│   ├── WASD_Initial_v0.1 → Aug12_10-26-07_/model_110.pt
+│   ├── WASD_Extended_v0.2 → Aug12_12-51-21_/model_1110.pt
+│   └── WASD_AD_Fix_v0.3 → (em treinamento)
+└── experiments/             # Versões experimentais
+    └── Biomimetic_Jump → (arquivado)
+```
+
+### **Convenção de Nomes**
+```
+{FEATURE}_{VARIANT}_v{MAJOR}.{MINOR}
+- FEATURE: WASD, Jump, Natural, etc.
+- VARIANT: Initial, Extended, Fix, Optimized
+- MAJOR: Breaking changes
+- MINOR: Incremental improvements
+```
+
+### **Comandos de Teste Rápido**
+```bash
+# Modelo de produção (caminhada natural)
+python play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000 --num_envs 1
+
+# Modelo com problema A/D (para comparação)
+python play.py --task g1 --load_run Aug12_12-51-21_ --checkpoint 1110 --num_envs 1
+
+# Novo modelo A/D Fix (após treino)
+python play.py --task g1 --load_run [NOVO_RUN] --checkpoint 200 --num_envs 1
+```
+
+## 🧪 **IMPLEMENTAÇÃO PULO (TECLA ESPAÇO) - FUTURO**
 
 ### **Modificações Necessárias no play.py:**
 

@@ -1,82 +1,183 @@
-# 🤖 Unitree RL - WASD Teleoperation + Jump Integration
+# 🤖 Unitree G1 + GR00T Foundation Model
 
-**Advanced Reinforcement Learning framework for Unitree humanoid robots (G1, H1, H1_2, Go2) with real-time WASD keyboard teleoperation and integrated jumping capabilities.**
+**Controle direto do humanoide Unitree G1 usando NVIDIA GR00T N1.5 Foundation Model com Isaac Sim para simulação e teleopera\u00e7\u00e3o via teclado/gamepad.**
 
-[![Python](https://img.shields.io/badge/Python-3.8-blue.svg)](https://python.org)
-[![Isaac Gym](https://img.shields.io/badge/Isaac%20Gym-Preview%204-green.svg)](https://developer.nvidia.com/isaac-gym)
-[![PyTorch](https://img.shields.io/badge/PyTorch-2.4.1-orange.svg)](https://pytorch.org)
+[![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://python.org)
+[![Isaac Sim](https://img.shields.io/badge/Isaac%20Sim-5.0.0-green.svg)](https://docs.isaacsim.omniverse.nvidia.com/)
+[![GR00T](https://img.shields.io/badge/GR00T-N1.5-red.svg)](https://developer.nvidia.com/isaac/gr00t)
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
-[![Status](https://img.shields.io/badge/Status-WASD%20%2B%20Jump%20Ready-brightgreen)](https://github.com/pedrosett/unitree-rl)
+[![Status](https://img.shields.io/badge/Status-GR00T%20Integration-brightgreen)](https://github.com/pedrosett/unitree-rl)
 
-## 🎯 Overview
+## 🎯 Objetivo Principal - GR00T Foundation Model
 
-This project extends the original Unitree RL framework with breakthrough capabilities:
+**FOCO EXCLUSIVO**: Usar o GR00T N1.5 como cérebro do Unitree G1, sem treinamento de políticas RL:
 
-- **🎮 Real-time WASD teleoperation** for intuitive robot control
-- **🧠 Biomimetic jumping system** with neural motor learning (SPACEBAR command)  
-- **⚡ Optimized turning dynamics** for tight curves and responsive movement
-- **🤸‍♂️ 5-phase jump sequence** mimicking human athletic movement
-- **📊 Complete Isaac Gym integration** with GPU-accelerated training
-- **✅ 100% Real-world transferable** - no external forces, only joint actuators
+- **🤖 GR00T N1.5** - Foundation model pré-treinado para controle humanóide
+- **🌍 Isaac Sim** - Simulação física para validação antes do robô real
+- **🎮 Controle Direto** - Teclado WASD → comandos para GR00T → ações do robô
+- **📡 Sim-to-Real** - Validação na simulação, deploy direto no G1 real
+- **🚀 Zero Training** - Sem PPO, sem RL, apenas inference do GR00T
+- **🎯 Gamepad Future** - Migração de teclado para gamepad
 
-## ✨ Key Features
+## ✨ Arquitetura GR00T
 
-### 🎮 WASD Teleoperation System
-- **W/S**: Forward/backward movement (optimized responsiveness)
-- **A/D**: Left/right turning (87% faster curves vs standard)
-- **SHIFT**: Speed boost mode (VX_FAST=1.2, WZ_FAST=2.0)
-- **SPACEBAR**: **Biomimetic jumping** with 5-phase neural motor learning
-- **Real-time feedback**: 50% reduced input latency (alpha=0.3)
+### 🤖 GR00T Foundation Model
+- **Modelo Pré-Treinado** - N1.5 com comportamentos de locomotion prontos
+- **Zero Training Required** - Apenas inference, sem treinamento RL
+- **Locomotion Focus** - Andar, curvas, movimentos básicos
+- **Humanoid Walking** - Comportamentos de caminhada natural
+- **WASD Control** - Controle simples de movimento
 
-### 🤸‍♂️ Biomimetic Jumping System
-- **Phase 1**: Preparation - Neural command triggers crouch position
-- **Phase 2**: Takeoff - Coordinated leg extension pushes ground naturally  
-- **Phase 3**: Airtime - Postural control during flight phase
-- **Phase 4**: Landing - Impact absorption with controlled leg flexion
-- **Phase 5**: Recovery - Seamless movement continuation post-landing
+### 🧪 Isaac Lab Como Interface Principal
+- **Teleoperation Framework** - Isaac Lab gerencia toda a teleopera\u00e7\u00e3o
+- **Device Support** - Teclado, gamepad via Isaac Lab APIs
+- **Environment Management** - Unitree G1 como Isaac Lab task
+- **Real-time Control** - Isaac Lab → GR00T → robot actions
+- **Built-in Tools** - Demos, scripts e exemplos prontos
 
-### 🚀 Performance Achievements
-- **1000%+ improvement** in episode stability (150 → 989+ steps)
-- **87% faster turning** dynamics for sharp maneuvers  
-- **Biomimetic motor learning** - genuine athletic movement patterns
-- **100% transferable** - no external forces, pure joint actuator control
-- **Sub-second command response** time with seamless WASD+Jump integration
+### 🎮 Controle WASD Simples via Isaac Lab + GR00T
+- **W**: Andar para frente → GR00T locomotion forward
+- **S**: Andar para trás → GR00T locomotion backward  
+- **A**: Curva à esquerda → GR00T turn left
+- **D**: Curva à direita → GR00T turn right
+- **Apenas Locomotion** - Sem manipulação, apenas movimento básico
 
-### 🧠 Advanced RL Architecture
-- **PPO + LSTM** with 64-dimensional memory for complex behaviors
-- **5-phase biomimetic reward system** - preparation, takeoff, airtime, landing, recovery
-- **Neural jump commands** integrated into observation space (48D total)
-- **Domain randomization** for robust real-world transfer
-- **GPU-parallel training** with 4096+ simultaneous environments
+### 🚀 Pipeline WASD Simples (Isaac Lab + GR00T)
+```
+WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validação
+    ↑           ↓         ↓         ↓            ↓
+   W/S/A/D   Teleop   Locomotion  Simulation   Visual
+   Input    Framework  Inference   Walking     Feedback
+```
 
-## 🚀 Quick Start
+## 🚀 Roadmap GR00T + Isaac Sim
 
-### Prerequisites
+### Fase 1: Setup Isaac Lab + GR00T ⚠️ EM PROGRESSO
+- **Isaac Sim 5.0.0** - Base de simulação
+- **Isaac Lab** - Framework de controle e teleoperação
+- **GR00T N1.5** - Foundation model como policy
+- **Unitree G1 Task** - Environment específico no Isaac Lab
 
-- **NVIDIA GPU** with CUDA support (Driver 525+)
-- **12GB+ VRAM** (8192 envs) or **16GB+ VRAM** (16384 envs optimization)
-- **Python 3.8** 
-- **32GB+ RAM** (recommended for GPU optimization)
-- **Ubuntu 18.04/20.04/22.04**
+### Fase 2: WASD Teleoperation + GR00T
+- **Isaac Lab Teleop Demo** - Usar demos de teleoperação existentes
+- **WASD Keyboard** - W/S/A/D para locomotion
+- **GR00T Locomotion** - GR00T como backend para caminhada
+- **G1 Walking** - Unitree G1 caminhando na simulação
 
-### Installation
+### Fase 3: Validação Visual WASD
+- **Isaac Sim Validation** - GR00T controlando G1 caminhada
+- **WASD Testing** - Testar W (frente), S (trás), A/D (curvas)
+- **User Validation** - Usuário observa e valida comportamento visual
+- **Visual Feedback** - Ver G1 respondendo aos comandos WASD
 
+## 🔧 Requisitos do Sistema GR00T
+
+### Sistema Atual - Ambiente `unitree-rl` 
+- **Python 3.8.20** (ambiente existente funcional)
+- **GLIBC 2.39** ✅ (compatível com Isaac Sim 5.0.0)
+- **PyTorch 2.4.1** (já instalado)
+- **Isaac Gym** (será mantido para comparação)
+- **NVIDIA CUDA 12.x** (drivers compatíveis)
+
+### Compatibilidade Isaac Sim
+- ✅ **GLIBC 2.39** (precisa 2.34+) 
+- ✅ **Python 3.8** (compatível com Isaac Sim)
+- ✅ **PyTorch 2.4.1** (pode coexistir)
+- ✅ **NVIDIA GPU** (já configurado)
+
+## 🛠️ Instalação no Ambiente Existente
+
+### 📂 Organização do Diretório
+**PADRÃO**: Todos os repos são clonados DENTRO de `/home/pedro_setubal/Workspaces/unitree_rl/`
+
+```
+unitree_rl/                    # Repo principal
+├── isaacgym/                  # ✅ Já existe (padrão estabelecido)
+├── IsaacLab/                  # 🔄 Será clonado aqui
+├── Isaac-GR00T/               # 🔄 Será clonado aqui  
+├── README.md                  # Este arquivo
+├── CLAUDE.md                  # Instruções
+└── models/                    # Modelos existentes
+```
+
+### Usar Ambiente `unitree-rl` Atual
 ```bash
-# Clone repository
-git clone https://github.com/pedrosett/unitree-rl.git
-cd unitree-rl
-
-# Setup conda environment
-conda create -n unitree-rl python=3.8
+# Ativar ambiente existente (NÃO criar novo)
 conda activate unitree-rl
 
-# Install Isaac Gym
-cd isaacgym/python
-pip install -e .
+# Verificar compatibilidade
+python --version  # Should show Python 3.8.20
+ldd --version     # Should show GLIBC 2.39+
+```
 
-# Install project dependencies
-cd examples/unitree_rl_gym  
-pip install -e .
+### Instalar Isaac Sim no Ambiente Existente  
+```bash
+# No ambiente unitree-rl existente
+conda activate unitree-rl
+
+# Isaac Sim via pip (compatível com Python 3.8)
+pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
+
+# Isaac Lab from source (DENTRO DO REPO unitree_rl)
+cd /home/pedro_setubal/Workspaces/unitree_rl
+git clone https://github.com/isaac-sim/IsaacLab.git
+cd IsaacLab
+./isaaclab.sh --install
+```
+
+### GR00T N1.5 no Ambiente Existente
+```bash
+# No mesmo ambiente unitree-rl
+conda activate unitree-rl
+
+# GR00T foundation model (DENTRO DO REPO unitree_rl)
+cd /home/pedro_setubal/Workspaces/unitree_rl
+git clone https://github.com/NVIDIA/Isaac-GR00T.git
+cd Isaac-GR00T && pip install -e .
+
+# Download model weights
+python scripts/download_models.py --model groot_n15
+```
+
+## 🎮 Comandos para Usuario Executar
+
+### ⚠️ PROTOCOLO DE SIMULAÇÃO
+**IMPORTANTE**: Claude fornece comandos, usuário executa em terminal separado com feedback.
+
+### Teste Isaac Lab WASD Teleoperation 
+```bash
+# *** COMANDO PARA USUARIO EXECUTAR ***
+conda activate unitree-rl
+cd /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab
+
+# Demo WASD locomotion básica
+./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
+
+# Controles WASD: W=frente, S=trás, A=esquerda, D=direita, ESC=sair
+# Usuario validação: WASD responsivo? Robot anda corretamente? Erros?
+```
+
+### Target: Unitree G1 WASD + GR00T (Desenvolvimento)
+```bash  
+# *** COMANDO FUTURO PARA USUARIO TESTAR ***
+conda activate unitree-rl
+cd /home/pedro_setubal/Workspaces/unitree_rl
+
+# Isaac Lab + Unitree G1 WASD walking
+./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Humanoid-Unitree-G1-v0 --teleop_device keyboard
+
+# Isaac Lab + GR00T WASD locomotion
+./isaaclab.sh -p scripts/groot_wasd_locomotion.py --robot unitree_g1 --policy groot_n15 --device keyboard
+```
+
+### Comparação com Sistema Legado
+```bash
+# *** SISTEMA ISAAC GYM ATUAL (funcional) ***
+conda activate unitree-rl  
+cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
+
+# Modelo WASD atual (para comparação)
+python legged_gym/scripts/play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000 --num_envs 1
 ```
 
 ### Training
@@ -85,8 +186,8 @@ pip install -e .
 # Navigate to project directory
 cd isaacgym/python/examples/unitree_rl_gym
 
-# Train G1 with WASD+Jump integration (1000 iterations)
-python legged_gym/scripts/train.py --task g1 --max_iterations 1000 --headless
+# Train G1 with WASD integration (1000 iterations, GPU optimized)
+python legged_gym/scripts/train.py --task g1 --max_iterations 1000 --headless --num_envs 8192
 
 # Monitor training progress
 tensorboard --logdir logs/
@@ -152,9 +253,14 @@ unitree_rl/
 ├── 📊 MDs/                      # Documentation
 │   ├── Sistema_Final_WASD_Caminhada_G1.md # 🆕 **FINAL SYSTEM - PRODUCTION READY**
 │   ├── Implementacao_WASD_Teleop_G1.md    # Development history
-│   ├── Sistema_Biomimetico_Pulo_G1.md     # Failed jump experiment (reference)
+│   ├── salto mortal/                      # Jump research documentation
 │   ├── 1_setup_ubuntu_isaac_conda.md      # Environment setup
 │   └── salto mortal/            # Jump research documentation
+├── 📁 models/                   # Model versioning system
+│   ├── MODEL_REGISTRY.md       # Model tracking and metrics
+│   ├── production/              # Production-ready models
+│   ├── testing/                 # Models under test
+│   └── experiments/             # Experimental versions
 ├── 🎮 isaacgym/                 # Isaac Gym Preview 4 (complete)
 │   ├── assets/                  # Robot models, textures, environments
 │   ├── python/                  # Core framework
@@ -168,19 +274,17 @@ unitree_rl/
 └── 🚫 .gitignore                # Excludes logs, cache, binaries
 ```
 
-### Biomimetic Jump Integration
+### Current Training Focus - A/D Responsiveness Fix
 
 ```python
-# 5-Phase Biomimetic Reward System
-jump_preparation = 0.8      # Phase 1: Crouch preparation
-jump_takeoff = 1.2         # Phase 2: Leg extension coordination  
-jump_airtime = 1.0         # Phase 3: Postural control in flight
-jump_landing = 1.5         # Phase 4: Impact absorption (CRITICAL)
-jump_recovery = 0.7        # Phase 5: Movement continuation
-
-# Enhanced base movement
-tracking_ang_vel = 1.2      # Optimized turning (87% faster)
+# Optimized for tight turns and responsive movement
+tracking_lin_vel = 1.0      # Linear movement tracking
+tracking_ang_vel = 2.5      # INCREASED for A/D responsiveness (was 1.2)
+action_rate = -0.005        # REDUCED for faster changes (was -0.01)
 alive = 0.15               # Stability maintenance
+
+# GPU Optimization
+num_envs = 8192            # 85-90% GPU utilization (vs 4096 = 63%)
 ```
 
 ## 🎛️ Configuration
@@ -193,9 +297,9 @@ VX_BASE, WZ_BASE = 1.0, 1.5    # 87% faster than standard (0.8, 0.8)
 VX_FAST, WZ_FAST = 1.2, 2.0    # Speed boost mode
 alpha = 0.3                     # 50% reduced input latency
 
-# Biomimetic jump neural command
-JUMP_IMPULSE = 15.0             # Neural command intensity (0.0 - 15.0)
-jump_command_buf                # Integrated into 48D observation space
+# Model versioning for easy testing
+# Check models/MODEL_REGISTRY.md for available versions
+# Example: python play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000
 ```
 
 ## 🔬 Scientific Background
