@@ -22,51 +22,51 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 
 ### Environment Setup - Isaac Sim Migration
 
-### 📂 PADRÃO DE ORGANIZAÇÃO OBRIGATÓRIO
-**TODOS os repos externos devem ser clonados DENTRO de `/home/pedro_setubal/Workspaces/unitree_rl/`**
+### 📂 MANDATORY ORGANIZATION STANDARD
+**ALL external repos must be cloned INSIDE `/home/pedro_setubal/Workspaces/unitree_rl/`**
 
-Exemplo isaacgym (já existente):
+Example isaacgym (already existing):
 - ✅ `/home/pedro_setubal/Workspaces/unitree_rl/isaacgym/`
 
-Novos repos devem seguir o mesmo padrão:
+New repos must follow the same pattern:
 - 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/`
 - 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/Isaac-GR00T/`
 
-#### AMBIENTE EXISTENTE: unitree-rl (USAR ESTE)
+#### EXISTING ENVIRONMENT: unitree-rl (USE THIS ONE)
 ```bash
-# Usar ambiente existente (NÃO criar novo)
+# Use existing environment (DO NOT create new)
 conda activate unitree-rl  # Python 3.8.20 + GLIBC 2.39
 
-# Instalar Isaac Sim no ambiente existente
+# Install Isaac Sim in existing environment
 pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
 
-# Isaac Lab from source (DENTRO DO REPO unitree_rl)
+# Isaac Lab from source (INSIDE unitree_rl repo)
 cd /home/pedro_setubal/Workspaces/unitree_rl
 git clone https://github.com/isaac-sim/IsaacLab.git
 cd IsaacLab && ./isaaclab.sh --install
 
-# GR00T N1.5 (DENTRO DO REPO unitree_rl)
+# GR00T N1.5 (INSIDE unitree_rl repo)
 cd /home/pedro_setubal/Workspaces/unitree_rl
 git clone https://github.com/NVIDIA/Isaac-GR00T.git
 cd Isaac-GR00T && pip install -e .
 ```
 
-#### SISTEMA ISAAC GYM (MANTER PARA COMPARAÇÃO)
+#### ISAAC GYM SYSTEM (KEEP FOR COMPARISON)
 ```bash
-# ✅ FUNCIONAL - Manter para comparação com GR00T
-conda activate unitree-rl  # Mesmo ambiente
+# ✅ FUNCTIONAL - Keep for comparison with GR00T
+conda activate unitree-rl  # Same environment
 cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
-# Modelo WASD atual disponível para testes
+# Current WASD model available for tests
 ```
 
-### Isaac Lab Teleoperation + GR00T (FOCO PRINCIPAL)
+### Isaac Lab Teleoperation + GR00T (MAIN FOCUS)
 
-#### NOVA ABORDAGEM: Isaac Lab + GR00T (SEM TRAINING)
+#### NEW APPROACH: Isaac Lab + GR00T (NO TRAINING)
 ```bash
-# Ativar ambiente Isaac Lab
+# Activate Isaac Lab environment
 conda activate isaac-lab-groot
 
-# Isaac Lab teleoperation com keyboard
+# Isaac Lab teleoperation with keyboard
 cd IsaacLab
 ./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
 
@@ -77,11 +77,11 @@ cd IsaacLab
 ./isaaclab.sh -p scripts/groot_teleop.py --robot unitree_g1 --policy groot_n15 --device keyboard --sim_device cuda
 ```
 
-#### SISTEMA DEPRECIADO: Isaac Gym (REMOVIDO)
+#### DEPRECATED SYSTEM: Isaac Gym (REMOVED)
 ```bash
-# ⚠️ COMPLETAMENTE DEPRECIADO
-# Não usamos mais treinamento RL/PPO
-# Apenas GR00T inference via Isaac Lab
+# ⚠️ COMPLETELY DEPRECATED
+# We no longer use RL/PPO training
+# Only GR00T inference via Isaac Lab
 ```
 
 ### Testing and Visualization
@@ -140,19 +140,19 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 ## Architecture
 
 ### Directory Structure (Updated for GR00T)
-- **README.md**: Documentação principal GR00T + Isaac Sim
-- **CLAUDE.md**: Este arquivo - workflow Isaac Lab + GR00T
-- **PLANO_EXECUTIVO_GROOT_WASD.md**: Checklist implementação
-- **MDs/**: Documentação organizada
-  - **old_research/**: 🚫 Era Isaac Gym (DEPRECADO)
-    - ***.md**: Guias Isaac Gym + PPO  
-    - **salto mortal/**: Pesquisa pulos
-    - ***.pdf**: Documentos antigos
-  - **README_OLD_RESEARCH.md**: Explicação organização
-- **IsaacLab/**: 🔄 Isaac Lab framework (será clonado)
-- **Isaac-GR00T/**: 🔄 GR00T N1.5 foundation model (será clonado)
-- **isaacgym/**: Sistema legacy Isaac Gym (manter para comparação)
-- **models/**: Modelos Isaac Gym (legacy)
+- **README.md**: Main GR00T + Isaac Sim documentation
+- **CLAUDE.md**: This file - Isaac Lab + GR00T workflow
+- **PLANO_EXECUTIVO_GROOT_WASD.md**: Implementation checklist
+- **MDs/**: Organized documentation
+  - **old_research/**: 🚫 Isaac Gym Era (DEPRECATED)
+    - ***.md**: Isaac Gym + PPO guides  
+    - **salto mortal/**: Jump research
+    - ***.pdf**: Old documents
+  - **README_OLD_RESEARCH.md**: Organization explanation
+- **IsaacLab/**: 🔄 Isaac Lab framework (will be cloned)
+- **Isaac-GR00T/**: 🔄 GR00T N1.5 foundation model (will be cloned)
+- **isaacgym/**: Legacy Isaac Gym system (keep for comparison)
+- **models/**: Isaac Gym models (legacy)
 
 ### Key Components (GR00T Era)
 

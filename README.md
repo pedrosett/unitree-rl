@@ -1,6 +1,6 @@
 # 🤖 Unitree G1 + GR00T Foundation Model
 
-**Controle direto do humanoide Unitree G1 usando NVIDIA GR00T N1.5 Foundation Model com Isaac Sim para simulação e teleopera\u00e7\u00e3o via teclado/gamepad.**
+**Direct control of Unitree G1 humanoid using NVIDIA GR00T N1.5 Foundation Model with Isaac Sim for simulation and keyboard/gamepad teleoperation.**
 
 [![Python](https://img.shields.io/badge/Python-3.11-blue.svg)](https://python.org)
 [![Isaac Sim](https://img.shields.io/badge/Isaac%20Sim-5.0.0-green.svg)](https://docs.isaacsim.omniverse.nvidia.com/)
@@ -8,129 +8,129 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-GR00T%20Integration-brightgreen)](https://github.com/pedrosett/unitree-rl)
 
-## 🎯 Objetivo Principal - GR00T Foundation Model
+## 🎯 Main Objective - GR00T Foundation Model
 
-**FOCO EXCLUSIVO**: Usar o GR00T N1.5 como cérebro do Unitree G1, sem treinamento de políticas RL:
+**EXCLUSIVE FOCUS**: Use GR00T N1.5 as the brain of Unitree G1, without RL policy training:
 
-- **🤖 GR00T N1.5** - Foundation model pré-treinado para controle humanóide
-- **🌍 Isaac Sim** - Simulação física para validação antes do robô real
-- **🎮 Controle Direto** - Teclado WASD → comandos para GR00T → ações do robô
-- **📡 Sim-to-Real** - Validação na simulação, deploy direto no G1 real
-- **🚀 Zero Training** - Sem PPO, sem RL, apenas inference do GR00T
-- **🎯 Gamepad Future** - Migração de teclado para gamepad
+- **🤖 GR00T N1.5** - Pre-trained foundation model for humanoid control
+- **🌍 Isaac Sim** - Physics simulation for validation before real robot
+- **🎮 Direct Control** - WASD keyboard → commands to GR00T → robot actions
+- **📡 Sim-to-Real** - Simulation validation, direct deployment to real G1
+- **🚀 Zero Training** - No PPO, no RL, only GR00T inference
+- **🎯 Gamepad Future** - Migration from keyboard to gamepad
 
-## ✨ Arquitetura GR00T
+## ✨ GR00T Architecture
 
 ### 🤖 GR00T Foundation Model
-- **Modelo Pré-Treinado** - N1.5 com comportamentos de locomotion prontos
-- **Zero Training Required** - Apenas inference, sem treinamento RL
-- **Locomotion Focus** - Andar, curvas, movimentos básicos
-- **Humanoid Walking** - Comportamentos de caminhada natural
-- **WASD Control** - Controle simples de movimento
+- **Pre-trained Model** - N1.5 with ready locomotion behaviors
+- **Zero Training Required** - Only inference, no RL training
+- **Locomotion Focus** - Walking, turning, basic movements
+- **Humanoid Walking** - Natural walking behaviors
+- **WASD Control** - Simple movement control
 
-### 🧪 Isaac Lab Como Interface Principal
-- **Teleoperation Framework** - Isaac Lab gerencia toda a teleopera\u00e7\u00e3o
-- **Device Support** - Teclado, gamepad via Isaac Lab APIs
-- **Environment Management** - Unitree G1 como Isaac Lab task
+### 🧪 Isaac Lab as Main Interface
+- **Teleoperation Framework** - Isaac Lab manages all teleoperation
+- **Device Support** - Keyboard, gamepad via Isaac Lab APIs
+- **Environment Management** - Unitree G1 as Isaac Lab task
 - **Real-time Control** - Isaac Lab → GR00T → robot actions
-- **Built-in Tools** - Demos, scripts e exemplos prontos
+- **Built-in Tools** - Demos, scripts and ready examples
 
-### 🎮 Controle WASD Simples via Isaac Lab + GR00T
-- **W**: Andar para frente → GR00T locomotion forward
-- **S**: Andar para trás → GR00T locomotion backward  
-- **A**: Curva à esquerda → GR00T turn left
-- **D**: Curva à direita → GR00T turn right
-- **Apenas Locomotion** - Sem manipulação, apenas movimento básico
+### 🎮 Simple WASD Control via Isaac Lab + GR00T
+- **W**: Walk forward → GR00T locomotion forward
+- **S**: Walk backward → GR00T locomotion backward  
+- **A**: Turn left → GR00T turn left
+- **D**: Turn right → GR00T turn right
+- **Locomotion Only** - No manipulation, only basic movement
 
-### 🚀 Pipeline WASD Simples (Isaac Lab + GR00T)
+### 🚀 Simple WASD Pipeline (Isaac Lab + GR00T)
 ```
-WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validação
+WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validation
     ↑           ↓         ↓         ↓            ↓
    W/S/A/D   Teleop   Locomotion  Simulation   Visual
    Input    Framework  Inference   Walking     Feedback
 ```
 
-## 🚀 Roadmap GR00T + Isaac Sim
+## 🚀 GR00T + Isaac Sim Roadmap
 
-### Fase 1: Setup Isaac Lab + GR00T ⚠️ EM PROGRESSO
-- **Isaac Sim 5.0.0** - Base de simulação
-- **Isaac Lab** - Framework de controle e teleoperação
-- **GR00T N1.5** - Foundation model como policy
-- **Unitree G1 Task** - Environment específico no Isaac Lab
+### Phase 1: Setup Isaac Lab + GR00T ⚠️ IN PROGRESS
+- **Isaac Sim 5.0.0** - Simulation base
+- **Isaac Lab** - Control and teleoperation framework
+- **GR00T N1.5** - Foundation model as policy
+- **Unitree G1 Task** - Specific environment in Isaac Lab
 
-### Fase 2: WASD Teleoperation + GR00T
-- **Isaac Lab Teleop Demo** - Usar demos de teleoperação existentes
-- **WASD Keyboard** - W/S/A/D para locomotion
-- **GR00T Locomotion** - GR00T como backend para caminhada
-- **G1 Walking** - Unitree G1 caminhando na simulação
+### Phase 2: WASD Teleoperation + GR00T
+- **Isaac Lab Teleop Demo** - Use existing teleoperation demos
+- **WASD Keyboard** - W/S/A/D for locomotion
+- **GR00T Locomotion** - GR00T as walking backend
+- **G1 Walking** - Unitree G1 walking in simulation
 
-### Fase 3: Validação Visual WASD
-- **Isaac Sim Validation** - GR00T controlando G1 caminhada
-- **WASD Testing** - Testar W (frente), S (trás), A/D (curvas)
-- **User Validation** - Usuário observa e valida comportamento visual
-- **Visual Feedback** - Ver G1 respondendo aos comandos WASD
+### Phase 3: Visual WASD Validation
+- **Isaac Sim Validation** - GR00T controlling G1 walking
+- **WASD Testing** - Test W (forward), S (backward), A/D (turns)
+- **User Validation** - User observes and validates visual behavior
+- **Visual Feedback** - See G1 responding to WASD commands
 
-## 🔧 Requisitos do Sistema GR00T
+## 🔧 GR00T System Requirements
 
-### Sistema Atual - Ambiente `unitree-rl` 
-- **Python 3.8.20** (ambiente existente funcional)
-- **GLIBC 2.39** ✅ (compatível com Isaac Sim 5.0.0)
-- **PyTorch 2.4.1** (já instalado)
-- **Isaac Gym** (será mantido para comparação)
-- **NVIDIA CUDA 12.x** (drivers compatíveis)
+### Current System - `unitree-rl` Environment 
+- **Python 3.8.20** (existing functional environment)
+- **GLIBC 2.39** ✅ (compatible with Isaac Sim 5.0.0)
+- **PyTorch 2.4.1** (already installed)
+- **Isaac Gym** (will be kept for comparison)
+- **NVIDIA CUDA 12.x** (compatible drivers)
 
-### Compatibilidade Isaac Sim
-- ✅ **GLIBC 2.39** (precisa 2.34+) 
-- ✅ **Python 3.8** (compatível com Isaac Sim)
-- ✅ **PyTorch 2.4.1** (pode coexistir)
-- ✅ **NVIDIA GPU** (já configurado)
+### Isaac Sim Compatibility
+- ✅ **GLIBC 2.39** (needs 2.34+) 
+- ✅ **Python 3.8** (compatible with Isaac Sim)
+- ✅ **PyTorch 2.4.1** (can coexist)
+- ✅ **NVIDIA GPU** (already configured)
 
-## 🛠️ Instalação no Ambiente Existente
+## 🛠️ Installation in Existing Environment
 
-### 📂 Organização do Diretório
-**PADRÃO**: Todos os repos são clonados DENTRO de `/home/pedro_setubal/Workspaces/unitree_rl/`
+### 📂 Directory Organization
+**STANDARD**: All repos are cloned INSIDE `/home/pedro_setubal/Workspaces/unitree_rl/`
 
 ```
-unitree_rl/                    # Repo principal
-├── isaacgym/                  # ✅ Já existe (padrão estabelecido)
-├── IsaacLab/                  # 🔄 Será clonado aqui
-├── Isaac-GR00T/               # 🔄 Será clonado aqui  
-├── README.md                  # Este arquivo
-├── CLAUDE.md                  # Instruções
-└── models/                    # Modelos existentes
+unitree_rl/                    # Main repo
+├── isaacgym/                  # ✅ Already exists (established standard)
+├── IsaacLab/                  # 🔄 Will be cloned here
+├── Isaac-GR00T/               # 🔄 Will be cloned here  
+├── README.md                  # This file
+├── CLAUDE.md                  # Instructions
+└── models/                    # Existing models
 ```
 
-### Usar Ambiente `unitree-rl` Atual
+### Use Current `unitree-rl` Environment
 ```bash
-# Ativar ambiente existente (NÃO criar novo)
+# Activate existing environment (DO NOT create new)
 conda activate unitree-rl
 
-# Verificar compatibilidade
+# Check compatibility
 python --version  # Should show Python 3.8.20
 ldd --version     # Should show GLIBC 2.39+
 ```
 
-### Instalar Isaac Sim no Ambiente Existente  
+### Install Isaac Sim in Existing Environment  
 ```bash
-# No ambiente unitree-rl existente
+# In existing unitree-rl environment
 conda activate unitree-rl
 
-# Isaac Sim via pip (compatível com Python 3.8)
+# Isaac Sim via pip (compatible with Python 3.8)
 pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
 
-# Isaac Lab from source (DENTRO DO REPO unitree_rl)
+# Isaac Lab from source (INSIDE unitree_rl repo)
 cd /home/pedro_setubal/Workspaces/unitree_rl
 git clone https://github.com/isaac-sim/IsaacLab.git
 cd IsaacLab
 ./isaaclab.sh --install
 ```
 
-### GR00T N1.5 no Ambiente Existente
+### GR00T N1.5 in Existing Environment
 ```bash
-# No mesmo ambiente unitree-rl
+# In same unitree-rl environment
 conda activate unitree-rl
 
-# GR00T foundation model (DENTRO DO REPO unitree_rl)
+# GR00T foundation model (INSIDE unitree_rl repo)
 cd /home/pedro_setubal/Workspaces/unitree_rl
 git clone https://github.com/NVIDIA/Isaac-GR00T.git
 cd Isaac-GR00T && pip install -e .
@@ -139,27 +139,27 @@ cd Isaac-GR00T && pip install -e .
 python scripts/download_models.py --model groot_n15
 ```
 
-## 🎮 Comandos para Usuario Executar
+## 🎮 Commands for User Execution
 
-### ⚠️ PROTOCOLO DE SIMULAÇÃO
-**IMPORTANTE**: Claude fornece comandos, usuário executa em terminal separado com feedback.
+### ⚠️ SIMULATION PROTOCOL
+**IMPORTANT**: Claude provides commands, user executes in separate terminal with feedback.
 
-### Teste Isaac Lab WASD Teleoperation 
+### Test Isaac Lab WASD Teleoperation 
 ```bash
-# *** COMANDO PARA USUARIO EXECUTAR ***
+# *** COMMAND FOR USER TO EXECUTE ***
 conda activate unitree-rl
 cd /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab
 
-# Demo WASD locomotion básica
+# Basic WASD locomotion demo
 ./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
 
-# Controles WASD: W=frente, S=trás, A=esquerda, D=direita, ESC=sair
-# Usuario validação: WASD responsivo? Robot anda corretamente? Erros?
+# WASD Controls: W=forward, S=backward, A=left, D=right, ESC=exit
+# User validation: WASD responsive? Robot walks correctly? Errors?
 ```
 
-### Target: Unitree G1 WASD + GR00T (Desenvolvimento)
+### Target: Unitree G1 WASD + GR00T (Development)
 ```bash  
-# *** COMANDO FUTURO PARA USUARIO TESTAR ***
+# *** FUTURE COMMAND FOR USER TO TEST ***
 conda activate unitree-rl
 cd /home/pedro_setubal/Workspaces/unitree_rl
 
@@ -170,13 +170,13 @@ cd /home/pedro_setubal/Workspaces/unitree_rl
 ./isaaclab.sh -p scripts/groot_wasd_locomotion.py --robot unitree_g1 --policy groot_n15 --device keyboard
 ```
 
-### Comparação com Sistema Legado
+### Comparison with Legacy System
 ```bash
-# *** SISTEMA ISAAC GYM ATUAL (funcional) ***
+# *** CURRENT ISAAC GYM SYSTEM (functional) ***
 conda activate unitree-rl  
 cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
 
-# Modelo WASD atual (para comparação)
+# Current WASD model (for comparison)
 python legged_gym/scripts/play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000 --num_envs 1
 ```
 
@@ -242,33 +242,33 @@ python train.py --task g1 --max_iterations 1000 --headless --num_envs 8192
 python train.py --task g1 --max_iterations 1000 --headless --num_envs 16384
 ```
 
-## 🏗️ Arquitetura Repositório
+## 🏗️ Repository Architecture
 
-### Estrutura Focada em GR00T
+### GR00T-Focused Structure
 
 ```
-unitree_rl/                      # Repo principal
-├── 📜 README.md                 # Este arquivo (GR00T focus)
-├── 📋 CLAUDE.md                 # Workflow Isaac Lab + GR00T
-├── 📊 PLANO_EXECUTIVO_GROOT_WASD.md  # Checklist implementação
-├── 📁 MDs/                      # Documentação
-│   ├── old_research/            # 🚫 Era Isaac Gym (DEPRECADO)
-│   │   ├── *.md                # Guias Isaac Gym + PPO  
-│   │   ├── salto mortal/       # Pesquisa pulos
-│   │   └── *.pdf               # Documentos antigos
-│   └── README_OLD_RESEARCH.md  # Explicação organização
-├── 🔄 IsaacLab/                # Isaac Lab (será clonado)
-├── 🔄 Isaac-GR00T/             # GR00T N1.5 (será clonado)
-├── 📁 models/                  # Modelos Isaac Gym (legacy)
-├── 🎮 isaacgym/                # Isaac Gym (legacy, manter)
-│   └── python/examples/unitree_rl_gym/  # Sistema antigo
+unitree_rl/                      # Main repo
+├── 📜 README.md                 # This file (GR00T focus)
+├── 📋 CLAUDE.md                 # Isaac Lab + GR00T workflow
+├── 📊 PLANO_EXECUTIVO_GROOT_WASD.md  # Implementation checklist
+├── 📁 MDs/                      # Documentation
+│   ├── old_research/            # 🚫 Isaac Gym Era (DEPRECATED)
+│   │   ├── *.md                # Isaac Gym + PPO guides  
+│   │   ├── salto mortal/       # Jump research
+│   │   └── *.pdf               # Old documents
+│   └── README_OLD_RESEARCH.md  # Organization explanation
+├── 🔄 IsaacLab/                # Isaac Lab (will be cloned)
+├── 🔄 Isaac-GR00T/             # GR00T N1.5 (will be cloned)
+├── 📁 models/                  # Isaac Gym models (legacy)
+├── 🎮 isaacgym/                # Isaac Gym (legacy, keep)
+│   └── python/examples/unitree_rl_gym/  # Old system
 └── 🚫 .gitignore               # Excludes logs, cache, binaries
 ```
 
-### Repositórios Externos (clonados aqui)
-- **IsaacLab/**: Framework principal de teleoperação  
-- **Isaac-GR00T/**: Foundation model N1.5
-- **isaacgym/**: Sistema legacy (manter para comparação)
+### External Repositories (cloned here)
+- **IsaacLab/**: Main teleoperation framework  
+- **Isaac-GR00T/**: N1.5 foundation model
+- **isaacgym/**: Legacy system (keep for comparison)
 
 ### GR00T Integration Status
 
@@ -283,9 +283,9 @@ simulation = "isaac_sim"           # Physics validation
 # NO MORE RL TRAINING - GR00T has pre-trained behaviors
 ```
 
-## 🎛️ Configuração GR00T
+## 🎛️ GR00T Configuration
 
-### Parâmetros WASD Simples
+### Simple WASD Parameters
 
 ```python
 # GR00T WASD mapping (to be implemented)
