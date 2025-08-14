@@ -3,3 +3,7 @@ __pycache__/
 *.pyc
 .cache/
 *.so
+
+# Isaac Sim & Isaac Lab (downloaded externally)
+Isaac-GR00T/
+IsaacLab/

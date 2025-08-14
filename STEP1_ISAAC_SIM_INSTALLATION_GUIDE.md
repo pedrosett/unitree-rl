@@ -1,6 +1,6 @@
-# Isaac Sim 5.0.0 Installation & Testing Guide - Ubuntu 24.04
+# STEP 1: Isaac Sim 5.0.0 Installation & Testing Guide - Ubuntu 24.04
 
-**Comprehensive guide for installing and testing NVIDIA Isaac Sim 5.0.0 with UI troubleshooting for Ubuntu 24.04 + RTX 4070 Super.**
+**Step 1 of GR00T integration: Comprehensive guide for installing and testing NVIDIA Isaac Sim 5.0.0 with UI troubleshooting for Ubuntu 24.04 + RTX 4070 Super.**
 
 ## 🔍 System Analysis & Final Configuration
 
@@ -646,4 +646,11 @@ tail -n 300 ~/.nvidia-omniverse/logs/Kit/Isaac-Sim\ Streaming/5.0/*.log \
 
 **Status**: ✅ Isaac Sim 5.0.0 FULLY OPERATIONAL on Ubuntu 24.04 + RTX 4070 Super + Ryzen 7 5500. UI working perfectly. Ready for simulation testing and Isaac Lab integration.
 
-**Generated with [Claude Code](https://claude.ai/code) - Isaac Sim 5.0.0 Installation & Configuration Guide**
+**Generated with [Claude Code](https://claude.ai/code) - STEP 1: Isaac Sim 5.0.0 Installation & Configuration Guide**
+
+---
+
+## 🚀 Next Step
+
+**After completing STEP 1 successfully**, proceed to:
+**[STEP 2: G1 URDF to USD Conversion](STEP2_G1_URDF_TO_USD_CONVERSION.md)**

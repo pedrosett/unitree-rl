@@ -58,7 +58,9 @@ WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validation
 - **✅ GR00T N1.5** - Foundation model installed and configured
 - **✅ System Compatibility** - RTX 4070 Super + Ryzen 7 5500 fully compatible
 
-### Phase 2: WASD Teleoperation + GR00T 🔄 **IN PROGRESS**
+### Phase 2: G1 Model Import + WASD Teleoperation 🔄 **IN PROGRESS**
+- **🔄 G1 URDF to USD** - Convert official Unitree G1 (23-DOF) to Isaac Sim format
+- **🔄 Physics Validation** - Verify mass, inertia, joint limits preservation
 - **Isaac Lab Teleop Demo** - Ready to test existing teleoperation demos
 - **WASD Keyboard** - W/S/A/D for locomotion control
 - **GR00T Locomotion** - GR00T as walking backend  
@@ -133,10 +135,37 @@ isaacsim isaacsim.exp.full.streaming --no-window \
 ### ⚠️ SIMULATION PROTOCOL
 **IMPORTANT**: Claude provides commands, user executes in separate terminal with feedback.
 
-### Test Isaac Lab WASD Teleoperation 
+### Phase 2A: Convert G1 URDF to USD (Critical First Step)
+**📋 Follow guide**: [`STEP2_G1_URDF_TO_USD_CONVERSION.md`](STEP2_G1_URDF_TO_USD_CONVERSION.md)
+
 ```bash
-# *** COMMAND FOR USER TO EXECUTE ***
-conda activate unitree-rl
+# *** COMMANDS FOR USER TO EXECUTE ***
+# 1. Add unitree_ros submodule
+cd /home/pedro_setubal/Workspaces/unitree_rl
+mkdir -p external
+git submodule add --depth 1 https://github.com/unitreerobotics/unitree_ros external/unitree_ros
+
+# 2. Convert G1 URDF to USD using Isaac Lab
+conda activate unitree-groot
+export URDF_PATH="/home/pedro_setubal/Workspaces/unitree_rl/external/unitree_ros/robots/g1_description/g1_23dof_rev_1_0.urdf"
+export OUT_DIR="/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/source/extensions/omni.isaac.lab_assets/data/Robots/Unitree/G1/23dof"
+mkdir -p "$OUT_DIR"
+
+python /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/source/tools/convert_urdf.py \
+  --urdf "$URDF_PATH" \
+  --out "$OUT_DIR" \
+  --merge-joints \
+  --make-instanceable
+
+# 3. Validate physics in Isaac Sim UI
+isaacsim isaacsim.exp.full --/exts/isaacsim.ros2.bridge/enabled=false
+# Load USD file and verify joint limits, mass, inertia properties
+```
+
+### Phase 2B: Test Isaac Lab WASD Teleoperation 
+```bash
+# *** COMMAND FOR USER TO EXECUTE (after USD conversion) ***
+conda activate unitree-groot
 cd /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab
 
 # Basic WASD locomotion demo
@@ -146,16 +175,16 @@ cd /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab
 # User validation: WASD responsive? Robot walks correctly? Errors?
 ```
 
-### Target: Unitree G1 WASD + GR00T (Development)
+### Phase 2C: Unitree G1 WASD + GR00T (Development)
 ```bash  
-# *** FUTURE COMMAND FOR USER TO TEST ***
-conda activate unitree-rl
+# *** FUTURE COMMAND FOR USER TO TEST (after USD conversion) ***
+conda activate unitree-groot
 cd /home/pedro_setubal/Workspaces/unitree_rl
 
-# Isaac Lab + Unitree G1 WASD walking
+# Isaac Lab + Unitree G1 WASD walking (using converted USD model)
 ./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Humanoid-Unitree-G1-v0 --teleop_device keyboard
 
-# Isaac Lab + GR00T WASD locomotion
+# Isaac Lab + GR00T WASD locomotion (final integration)
 ./isaaclab.sh -p scripts/groot_wasd_locomotion.py --robot unitree_g1 --policy groot_n15 --device keyboard
 ```
 
@@ -422,8 +451,11 @@ If you use this work in your research, please cite:
 4. **Launch Command**: `--reset-user` + disable ROS 2 bridge
 5. **System Configuration**: RTX 4070 Super + Ryzen 7 5500 proven compatible
 
+#### **Current Phase:**
+🔄 **G1 Model Conversion** - Convert Unitree G1 URDF to USD format for Isaac Sim
+
 #### **Next Phase:**
-🔄 **Isaac Lab Integration Testing** - WASD teleoperation demos ready for testing
+🔄 **Isaac Lab Integration Testing** - WASD teleoperation demos ready after G1 model conversion
 
 ---
 
