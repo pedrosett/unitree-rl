@@ -8,15 +8,15 @@
 [![License](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 [![Status](https://img.shields.io/badge/Status-GR00T%20Integration-brightgreen)](https://github.com/pedrosett/unitree-rl)
 
-## 🎯 Main Objective - GR00T Foundation Model
+## 🎯 Main Objective - GR00T Foundation Model Integration
 
-**EXCLUSIVE FOCUS**: Use GR00T N1.5 as the brain of Unitree G1, without RL policy training:
+**STEP-BY-STEP APPROACH**: Systematic integration of GR00T N1.5 with Unitree G1 via Isaac Lab:
 
-- **🤖 GR00T N1.5** - Pre-trained foundation model for humanoid control
-- **🌍 Isaac Sim** - Physics simulation for validation before real robot
-- **🎮 Direct Control** - WASD keyboard → commands to GR00T → robot actions
-- **🚀 Zero Training** - No PPO, no RL, only GR00T inference
-- **🎯 Gamepad Future** - Migration from keyboard to gamepad
+- **🤖 GR00T N1.5** - Pre-trained foundation model for humanoid intelligence
+- **🌍 Isaac Sim** - Physics simulation platform for G1 validation
+- **🎮 SE(2) Teleoperation** - Arrow keys + Z/X → velocity commands → G1 locomotion  
+- **🚀 Zero Training** - No RL training required, only GR00T inference
+- **🔗 Text-to-Velocity Bridge** - Natural language → GR00T → locomotion commands
 
 ## ✨ GR00T Architecture
 
@@ -34,43 +34,60 @@
 - **Real-time Control** - Isaac Lab → GR00T → robot actions
 - **Built-in Tools** - Demos, scripts and ready examples
 
-### 🎮 Simple WASD Control via Isaac Lab + GR00T
-- **W**: Walk forward → GR00T locomotion forward
-- **S**: Walk backward → GR00T locomotion backward  
-- **A**: Turn left → GR00T turn left
-- **D**: Turn right → GR00T turn right
-- **Locomotion Only** - No manipulation, only basic movement
+### 🎮 SE(2) Teleoperation Control via Isaac Lab + GR00T
+- **↑↓**: Forward/backward velocity (vx) → GR00T locomotion planning
+- **←→**: Left/right strafe velocity (vy) → GR00T lateral movement  
+- **Z/X**: Yaw rotation (ωz) → GR00T turning behaviors
+- **Future**: Natural language commands → GR00T text-to-velocity
 
-### 🚀 Simple WASD Pipeline (Isaac Lab + GR00T)
+### 🚀 Control Pipeline (Isaac Lab + GR00T Integration)
 ```
-WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validation
-    ↑           ↓         ↓         ↓            ↓
-   W/S/A/D   Teleop   Locomotion  Simulation   Visual
-   Input    Framework  Inference   Walking     Feedback
+Arrow Keys/Text → Isaac Lab SE(2) → GR00T N1.5 → G1 Locomotion → Physics Validation
+       ↑              ↓               ↓             ↓                    ↓
+   Keyboard/NL    Teleop Interface  Foundation    Joint Actions      Isaac Sim
+      Input        (vx,vy,ωz)       Model AI      Commands          Simulation
 ```
 
-## 🚀 GR00T + Isaac Sim Roadmap
+## 🚀 GR00T Integration Roadmap - Step by Step
 
-### Phase 1: Setup Isaac Lab + GR00T ✅ **COMPLETE!**
-- **✅ Isaac Sim 5.0.0** - Successfully installed and tested on Ubuntu 24.04
+### ✅ STEP 1: Isaac Sim 5.0.0 Installation **COMPLETED**
+**Guide**: [`STEP1_ISAAC_SIM_INSTALLATION_GUIDE.md`](STEP1_ISAAC_SIM_INSTALLATION_GUIDE.md)
+- **✅ Isaac Sim 5.0.0** - Successfully installed via pip on Ubuntu 24.04
+- **✅ UI Interface** - Opens without crashes using `--reset-user` solution
+- **✅ System Validation** - RTX 4070 Super + Ryzen 7 5500 fully compatible
+- **✅ Environment** - unitree-groot with Python 3.11.13 configured
 - **✅ Isaac Lab** - Installed and ready for teleoperation framework
-- **✅ GR00T N1.5** - Foundation model installed and configured
-- **✅ System Compatibility** - RTX 4070 Super + Ryzen 7 5500 fully compatible
+- **✅ GR00T Repository** - Isaac-GR00T cloned and configured
 
-### Phase 2: G1 Model Import + WASD Teleoperation ✅ **MODEL VALIDATED**
-- **✅ G1 URDF to USD** - Convert official Unitree G1 (23-DOF) to Isaac Sim format
-- **✅ Physics Validation** - Verified mass, inertia, joint limits preservation
-- **✅ Smoke Test** - G1 robot displays and responds to physics correctly
-- **🔄 Isaac Lab Teleop Demo** - Ready to test existing teleoperation demos
-- **WASD Keyboard** - W/S/A/D for locomotion control
-- **GR00T Locomotion** - GR00T as walking backend  
-- **G1 Walking** - Unitree G1 walking in simulation
+### ✅ STEP 2: G1 URDF to USD Conversion **COMPLETED**
+**Guide**: [`STEP2_G1_URDF_TO_USD_CONVERSION.md`](STEP2_G1_URDF_TO_USD_CONVERSION.md)
+- **✅ Unitree ROS Submodule** - Official G1 URDF access via git submodule
+- **✅ URDF to USD Conversion** - Isaac Lab converter used successfully in headless mode
+- **✅ Physics Properties** - Mass, inertia, joint limits preserved from URDF
+- **✅ Output Location** - g1_23dof.usd generated in Isaac Lab assets directory
+- **✅ Conversion Command** - `./isaaclab.sh -p scripts/tools/convert_urdf.py --merge-joints --headless`
 
-### Phase 3: Visual WASD Validation
-- **Isaac Sim Validation** - GR00T controlling G1 walking
-- **WASD Testing** - Test W (forward), S (backward), A/D (turns)
-- **User Validation** - User observes and validates visual behavior
-- **Visual Feedback** - See G1 responding to WASD commands
+### ✅ STEP 3: G1 USD Model Validation **COMPLETED**
+**Guide**: [`STEP3_G1_USD_SMOKE_TEST.md`](STEP3_G1_USD_SMOKE_TEST.md)
+- **✅ USD Loading** - G1 robot appears correctly in Isaac Sim viewport
+- **✅ Physics Response** - Robot responds naturally to gravity without explosions
+- **✅ ArticulationRoot** - 23 DOF structure with proper joint hierarchy
+- **✅ Ground Interaction** - Robot positioned at z=0.02, interacts with ground plane
+- **✅ Smoke Test** - Basic physics validation confirmed successful
+
+### 🔄 STEP 4: Isaac Lab Teleoperation + GR00T Preparation **IN PROGRESS**
+**Guide**: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md)
+- **🔄 Isaac Lab SE(2) Teleoperation** - Arrow keys (↑↓←→) + Z/X for yaw rotation
+- **🔄 G1 Locomotion Environment** - Test Isaac-Velocity-Flat-G1-Play-v0 task
+- **🔄 Keyboard Controls Validation** - Verify stable walking with teleop commands
+- **🔄 GR00T N1.5-3B Server** - Setup inference server for future integration
+- **🔄 Client-Server Test** - Validate GR00T inference pipeline locally
+
+### 📋 STEP 5: GR00T Integration & Natural Language Control **PLANNED**
+- **GR00T SE(2) Bridge** - Connect GR00T inference to Isaac Lab velocity interface
+- **Text-to-Velocity Translation** - Natural language commands → (vx, vy, ωz) vectors
+- **Integrated Walking** - GR00T high-level planning + Isaac Lab reactive control
+- **End-to-End Validation** - "walk forward" → GR00T → Isaac Lab → G1 locomotion
 
 ## 🔧 Verified System Specifications ✅
 
@@ -135,57 +152,55 @@ isaacsim isaacsim.exp.full.streaming --no-window \
 ### ⚠️ SIMULATION PROTOCOL
 **IMPORTANT**: Claude provides commands, user executes in separate terminal with feedback.
 
-### Phase 2A: Convert G1 URDF to USD (Critical First Step)
-**📋 Follow guide**: [`STEP2_G1_URDF_TO_USD_CONVERSION.md`](STEP2_G1_URDF_TO_USD_CONVERSION.md)
+## 🎮 Commands for Current Step (STEP 4)
 
+### 📋 Follow Current Guide: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md)
+
+### STEP 4A: Isaac Lab Environment Validation
 ```bash
 # *** COMMANDS FOR USER TO EXECUTE ***
-# 1. Add unitree_ros submodule
-cd /home/pedro_setubal/Workspaces/unitree_rl
-mkdir -p external
-git submodule add --depth 1 https://github.com/unitreerobotics/unitree_ros external/unitree_ros
-
-# 2. Convert G1 URDF to USD using Isaac Lab
+source ~/anaconda3/etc/profile.d/conda.sh
 conda activate unitree-groot
-export URDF_PATH="/home/pedro_setubal/Workspaces/unitree_rl/external/unitree_ros/robots/g1_description/g1_23dof_rev_1_0.urdf"
-export OUT_DIR="/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/source/extensions/omni.isaac.lab_assets/data/Robots/Unitree/G1/23dof"
-mkdir -p "$OUT_DIR"
+export OMNI_KIT_ACCEPT_EULA=YES
+cd ~/Workspaces/unitree_rl/IsaacLab
 
-python /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/source/tools/convert_urdf.py \
-  --urdf "$URDF_PATH" \
-  --out "$OUT_DIR" \
-  --merge-joints \
-  --make-instanceable
-
-# 3. Validate physics in Isaac Sim UI
-isaacsim isaacsim.exp.full --/exts/isaacsim.ros2.bridge/enabled=false
-# Load USD file and verify joint limits, mass, inertia properties
+# List G1 environments to confirm availability
+./isaaclab.sh -p scripts/environments/list_envs.py | grep -i "G1"
+# Expected: Isaac-Velocity-Flat-G1-Play-v0 and Isaac-Velocity-Rough-G1-Play-v0
 ```
 
-### Phase 2B: Test Isaac Lab WASD Teleoperation 
+### STEP 4B: Isaac Lab SE(2) Teleoperation Test
 ```bash
-# *** COMMAND FOR USER TO EXECUTE (after USD conversion) ***
-conda activate unitree-groot
-cd /home/pedro_setubal/Workspaces/unitree_rl/IsaacLab
+# Test G1 locomotion with keyboard controls (arrow keys + Z/X)
+./isaaclab.sh -p scripts/environments/teleoperation/teleop_se2_agent.py \
+    --task Isaac-Velocity-Flat-G1-Play-v0 \
+    --teleop_device keyboard \
+    --num_envs 1
 
-# Basic WASD locomotion demo
-./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
-
-# WASD Controls: W=forward, S=backward, A=left, D=right, ESC=exit
-# User validation: WASD responsive? Robot walks correctly? Errors?
+# Controls (SE2 Keyboard standard):
+# ↑↓: Forward/backward (vx)
+# ←→: Left/right strafe (vy) 
+# Z/X: Rotate left/right (ωz)
+# ESC: Exit
 ```
 
-### Phase 2C: Unitree G1 WASD + GR00T (Development)
-```bash  
-# *** FUTURE COMMAND FOR USER TO TEST (after USD conversion) ***
-conda activate unitree-groot
-cd /home/pedro_setubal/Workspaces/unitree_rl
+### STEP 4C: GR00T Inference Server Setup
+```bash
+# Clone and setup GR00T (if not done)
+cd ~/Workspaces/unitree_rl
+git clone https://github.com/NVIDIA/Isaac-GR00T.git
+cd Isaac-GR00T
+python -m pip install -e .
 
-# Isaac Lab + Unitree G1 WASD walking (using converted USD model)
-./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Humanoid-Unitree-G1-v0 --teleop_device keyboard
+# Start GR00T inference server (N1.5-3B model)
+python scripts/inference_service.py --server \
+    --model-path nvidia/GR00T-N1.5-3B \
+    --device cuda
 
-# Isaac Lab + GR00T WASD locomotion (final integration)
-./isaaclab.sh -p scripts/groot_wasd_locomotion.py --robot unitree_g1 --policy groot_n15 --device keyboard
+# Test client in separate terminal
+python scripts/inference_service.py --client \
+    --model-path nvidia/GR00T-N1.5-3B \
+    --device cuda
 ```
 
 ### Comparison with Legacy System
@@ -452,10 +467,10 @@ If you use this work in your research, please cite:
 5. **System Configuration**: RTX 4070 Super + Ryzen 7 5500 proven compatible
 
 #### **Current Phase:**
-✅ **G1 Model Validated** - G1 robot successfully converted and tested in Isaac Sim
+🔄 **STEP 4: Isaac Lab Teleoperation + GR00T Preparation** - Testing keyboard controls and GR00T inference server
 
 #### **Next Phase:**
-🔄 **Isaac Lab Integration Testing** - WASD teleoperation demos ready after G1 model conversion
+📋 **STEP 5: GR00T Integration** - Natural language control via text-to-velocity bridge
 
 ---
 
