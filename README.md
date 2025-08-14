@@ -52,16 +52,16 @@ WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validation
 
 ## 🚀 GR00T + Isaac Sim Roadmap
 
-### Phase 1: Setup Isaac Lab + GR00T ⚠️ IN PROGRESS
-- **Isaac Sim 5.0.0** - Simulation base
-- **Isaac Lab** - Control and teleoperation framework
-- **GR00T N1.5** - Foundation model as policy
-- **Unitree G1 Task** - Specific environment in Isaac Lab
+### Phase 1: Setup Isaac Lab + GR00T ✅ **COMPLETE!**
+- **✅ Isaac Sim 5.0.0** - Successfully installed and tested on Ubuntu 24.04
+- **✅ Isaac Lab** - Installed and ready for teleoperation framework
+- **✅ GR00T N1.5** - Foundation model installed and configured
+- **✅ System Compatibility** - RTX 4070 Super + Ryzen 7 5500 fully compatible
 
-### Phase 2: WASD Teleoperation + GR00T
-- **Isaac Lab Teleop Demo** - Use existing teleoperation demos
-- **WASD Keyboard** - W/S/A/D for locomotion
-- **GR00T Locomotion** - GR00T as walking backend
+### Phase 2: WASD Teleoperation + GR00T 🔄 **IN PROGRESS**
+- **Isaac Lab Teleop Demo** - Ready to test existing teleoperation demos
+- **WASD Keyboard** - W/S/A/D for locomotion control
+- **GR00T Locomotion** - GR00T as walking backend  
 - **G1 Walking** - Unitree G1 walking in simulation
 
 ### Phase 3: Visual WASD Validation
@@ -70,20 +70,22 @@ WASD Keys → Isaac Lab → GR00T → Isaac Sim G1 → Validation
 - **User Validation** - User observes and validates visual behavior
 - **Visual Feedback** - See G1 responding to WASD commands
 
-## 🔧 GR00T System Requirements
+## 🔧 Verified System Specifications ✅
 
-### Current System - `unitree-rl` Environment 
-- **Python 3.8.20** (existing functional environment)
-- **GLIBC 2.39** ✅ (compatible with Isaac Sim 5.0.0)
-- **PyTorch 2.4.1** (already installed)
-- **Isaac Gym** (will be kept for comparison)
-- **NVIDIA CUDA 12.x** (compatible drivers)
+### **CONFIRMED WORKING SYSTEM:**
+- **✅ CPU**: AMD Ryzen 7 5500 (tested and compatible)
+- **✅ GPU**: NVIDIA RTX 4070 Super (fully supported)
+- **✅ OS**: Ubuntu 24.04 LTS with X11 (optimal configuration)
+- **✅ Driver**: NVIDIA 575.64.03 (recommended for Isaac Sim 5.0.0)
+- **✅ Python**: 3.11.13 in `unitree-groot` environment
+- **✅ GLIBC**: 2.39 (exceeds Isaac Sim requirements)
 
-### Isaac Sim Compatibility
-- ✅ **GLIBC 2.39** (needs 2.34+) 
-- ✅ **Python 3.8** (compatible with Isaac Sim)
-- ✅ **PyTorch 2.4.1** (can coexist)
-- ✅ **NVIDIA GPU** (already configured)
+### **Isaac Sim Installation Status:**
+- **✅ Isaac Sim 5.0.0**: Successfully installed via pip
+- **✅ UI Interface**: Opens without crashes or freezing
+- **✅ Physics Simulation**: Tested and working perfectly
+- **✅ 3D Rendering**: Smooth graphics with full GPU acceleration
+- **✅ WebRTC Streaming**: Available as backup (port 8011)
 
 ## 🛠️ Installation in Existing Environment
 
@@ -100,44 +102,31 @@ unitree_rl/                    # Main repo
 └── models/                    # Existing models
 ```
 
-### Use Current `unitree-rl` Environment
-```bash
-# Activate existing environment (DO NOT create new)
-conda activate unitree-rl
+### **✅ INSTALLATION COMPLETE - Working Commands:**
 
-# Check compatibility
-python --version  # Should show Python 3.8.20
-ldd --version     # Should show GLIBC 2.39+
+```bash
+# Use unitree-groot environment (Python 3.11.13)
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate unitree-groot
+export OMNI_KIT_ACCEPT_EULA=YES
+
+# Launch Isaac Sim successfully
+isaacsim isaacsim.exp.full --/exts/isaacsim.ros2.bridge/enabled=false
+
+# Alternative: WebRTC Streaming (if UI needed remotely)
+isaacsim isaacsim.exp.full.streaming --no-window \
+  --/exts/isaacsim.ros2.bridge/enabled=false \
+  --/app/livestream/protocol=webrtc \
+  --/app/livestream/webrtc/enabled=true \
+  --/app/livestream/webrtc/secure=false \
+  --/app/livestream/webrtc/port=8011
 ```
 
-### Install Isaac Sim in Existing Environment  
-```bash
-# In existing unitree-rl environment
-conda activate unitree-rl
-
-# Isaac Sim via pip (compatible with Python 3.8)
-pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
-
-# Isaac Lab from source (INSIDE unitree_rl repo)
-cd /home/pedro_setubal/Workspaces/unitree_rl
-git clone https://github.com/isaac-sim/IsaacLab.git
-cd IsaacLab
-./isaaclab.sh --install
-```
-
-### GR00T N1.5 in Existing Environment
-```bash
-# In same unitree-rl environment
-conda activate unitree-rl
-
-# GR00T foundation model (INSIDE unitree_rl repo)
-cd /home/pedro_setubal/Workspaces/unitree_rl
-git clone https://github.com/NVIDIA/Isaac-GR00T.git
-cd Isaac-GR00T && pip install -e .
-
-# Download model weights
-python scripts/download_models.py --model groot_n15
-```
+### **Installation Details:**
+- **✅ Isaac Sim 5.0.0**: Installed via pip in `unitree-groot` environment
+- **✅ Isaac Lab**: Cloned and configured from source
+- **✅ GR00T N1.5**: Foundation model ready for integration
+- **✅ Solution**: `--reset-user` + disable ROS 2 bridge = perfect UI operation
 
 ## 🎮 Commands for User Execution
 
@@ -407,4 +396,35 @@ If you use this work in your research, please cite:
 
 *This project represents cutting-edge research in reinforcement learning, human-robot interaction, and autonomous systems. Join us in pushing the boundaries of what's possible with intelligent robots.*
 
-**⚡ Ready to train your own robot? Let's get started!**
+---
+
+## 🎊 **PROJECT STATUS - MAJOR MILESTONE ACHIEVED!**
+
+### ✅ **ISAAC SIM 5.0.0 SUCCESSFULLY INSTALLED AND TESTED!**
+
+**Date**: August 14, 2025  
+**System**: Ubuntu 24.04 + RTX 4070 Super + Ryzen 7 5500  
+**Status**: ✅ **FULLY OPERATIONAL**
+
+#### **What's Working:**
+- ✅ **Isaac Sim UI**: Opens without crashes or freezing
+- ✅ **Physics Simulation**: Cube + ground plane physics perfect
+- ✅ **3D Rendering**: Smooth graphics with GPU acceleration  
+- ✅ **Interactive Controls**: Camera, play/pause fully responsive
+- ✅ **WebRTC Streaming**: Available as backup on port 8011
+- ✅ **Isaac Lab**: Installed and ready for teleoperation
+- ✅ **GR00T N1.5**: Foundation model configured
+
+#### **Key Success Factors:**
+1. **Environment**: `unitree-groot` with Python 3.11.13
+2. **Driver**: NVIDIA 575.64.03 (critical for stability)
+3. **X11 Session**: Ubuntu with X11 (not Wayland)
+4. **Launch Command**: `--reset-user` + disable ROS 2 bridge
+5. **System Configuration**: RTX 4070 Super + Ryzen 7 5500 proven compatible
+
+#### **Next Phase:**
+🔄 **Isaac Lab Integration Testing** - WASD teleoperation demos ready for testing
+
+---
+
+**⚡ Isaac Sim is ready! Let's move to robot simulations!**
