@@ -15,7 +15,6 @@
 - **🤖 GR00T N1.5** - Pre-trained foundation model for humanoid control
 - **🌍 Isaac Sim** - Physics simulation for validation before real robot
 - **🎮 Direct Control** - WASD keyboard → commands to GR00T → robot actions
-- **📡 Sim-to-Real** - Simulation validation, direct deployment to real G1
 - **🚀 Zero Training** - No PPO, no RL, only GR00T inference
 - **🎯 Gamepad Future** - Migration from keyboard to gamepad
 
@@ -458,5 +457,6 @@ If you use this work in your research, please cite:
 🔄 **Isaac Lab Integration Testing** - WASD teleoperation demos ready after G1 model conversion
 
 ---
+
 
 **⚡ Isaac Sim is ready! Let's move to robot simulations!**
