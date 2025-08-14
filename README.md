@@ -75,13 +75,14 @@ Arrow Keys/Text → Isaac Lab SE(2) → GR00T N1.5 → G1 Locomotion → Physics
 - **✅ Ground Interaction** - Robot positioned at z=0.02, interacts with ground plane
 - **✅ Smoke Test** - Basic physics validation confirmed successful
 
-### 🔄 STEP 4: Isaac Lab Teleoperation + GR00T Preparation **IN PROGRESS**
-**Guide**: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md)
-- **🔄 Isaac Lab SE(2) Teleoperation** - Arrow keys (↑↓←→) + Z/X for yaw rotation
-- **🔄 G1 Locomotion Environment** - Test Isaac-Velocity-Flat-G1-Play-v0 task
-- **🔄 Keyboard Controls Validation** - Verify stable walking with teleop commands
-- **🔄 GR00T N1.5-3B Server** - Setup inference server for future integration
-- **🔄 Client-Server Test** - Validate GR00T inference pipeline locally
+### 🔄 STEP 4: Isaac Lab Teleoperation + GR00T N1.5-3B Integration **READY FOR EXECUTION**
+**Guide**: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md) - **COMPLETELY RESTRUCTURED**
+- **🔄 Part A-B**: System dependencies + Isaac Lab environment validation 
+- **🔄 Part C**: SE(2) Teleoperation testing (↑↓←→ + Z/X) with detailed troubleshooting
+- **🔄 Part D**: Isaac-GR00T installation with FlashAttention optimization
+- **🔄 Part E**: GR00T N1.5-3B model download (~6GB) and local caching
+- **🔄 Part F**: Inference server setup + client testing with validation checkpoints
+- **🔄 Part G**: Complete system integration readiness for STEP 5 bridge
 
 ### 📋 STEP 5: GR00T Integration & Natural Language Control **PLANNED**
 - **GR00T SE(2) Bridge** - Connect GR00T inference to Isaac Lab velocity interface
@@ -156,51 +157,29 @@ isaacsim isaacsim.exp.full.streaming --no-window \
 
 ### 📋 Follow Current Guide: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md)
 
-### STEP 4A: Isaac Lab Environment Validation
+### Current STEP 4 Commands (Comprehensive Guide Available)
+
+**📋 Follow Detailed Guide**: [`STEP4_G1_TELEOP_AND_GROOT.md`](STEP4_G1_TELEOP_AND_GROOT.md)
+
+The STEP 4 guide now includes:
+- **7 Complete Parts (A-G)** with validation checkpoints
+- **System dependencies** setup (FFmpeg, CUDA, etc.)
+- **Isaac Lab environment** validation and troubleshooting
+- **SE(2) Teleoperation** testing protocol with G1
+- **Isaac-GR00T installation** with FlashAttention
+- **GR00T N1.5-3B** model download and caching
+- **Inference server** setup and performance monitoring
+- **Integration readiness** validation for STEP 5
+
+**Quick Start Commands:**
 ```bash
-# *** COMMANDS FOR USER TO EXECUTE ***
+# Environment setup
 source ~/anaconda3/etc/profile.d/conda.sh
 conda activate unitree-groot
 export OMNI_KIT_ACCEPT_EULA=YES
-cd ~/Workspaces/unitree_rl/IsaacLab
 
-# List G1 environments to confirm availability
-./isaaclab.sh -p scripts/environments/list_envs.py | grep -i "G1"
-# Expected: Isaac-Velocity-Flat-G1-Play-v0 and Isaac-Velocity-Rough-G1-Play-v0
-```
-
-### STEP 4B: Isaac Lab SE(2) Teleoperation Test
-```bash
-# Test G1 locomotion with keyboard controls (arrow keys + Z/X)
-./isaaclab.sh -p scripts/environments/teleoperation/teleop_se2_agent.py \
-    --task Isaac-Velocity-Flat-G1-Play-v0 \
-    --teleop_device keyboard \
-    --num_envs 1
-
-# Controls (SE2 Keyboard standard):
-# ↑↓: Forward/backward (vx)
-# ←→: Left/right strafe (vy) 
-# Z/X: Rotate left/right (ωz)
-# ESC: Exit
-```
-
-### STEP 4C: GR00T Inference Server Setup
-```bash
-# Clone and setup GR00T (if not done)
-cd ~/Workspaces/unitree_rl
-git clone https://github.com/NVIDIA/Isaac-GR00T.git
-cd Isaac-GR00T
-python -m pip install -e .
-
-# Start GR00T inference server (N1.5-3B model)
-python scripts/inference_service.py --server \
-    --model-path nvidia/GR00T-N1.5-3B \
-    --device cuda
-
-# Test client in separate terminal
-python scripts/inference_service.py --client \
-    --model-path nvidia/GR00T-N1.5-3B \
-    --device cuda
+# Follow STEP 4 guide parts A through G for complete setup
+# Each part includes validation checkpoints before proceeding
 ```
 
 ### Comparison with Legacy System
@@ -467,7 +446,7 @@ If you use this work in your research, please cite:
 5. **System Configuration**: RTX 4070 Super + Ryzen 7 5500 proven compatible
 
 #### **Current Phase:**
-🔄 **STEP 4: Isaac Lab Teleoperation + GR00T Preparation** - Testing keyboard controls and GR00T inference server
+🔄 **STEP 4: Isaac Lab Teleoperation + GR00T N1.5-3B Integration** - Comprehensive setup guide with 7 validation parts
 
 #### **Next Phase:**
 📋 **STEP 5: GR00T Integration** - Natural language control via text-to-velocity bridge
