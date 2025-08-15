@@ -2,42 +2,63 @@
 
 This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
-## Project Overview - ISAAC SIM MIGRATION 🚀
+## Project Overview - DUAL SYSTEM ARCHITECTURE 🚀
 
-**MAJOR TRANSITION**: This project is migrating from Isaac Gym to NVIDIA Isaac Sim + Isaac Lab + GR00T integration for next-generation humanoid robot control.
+**MAJOR EVOLUTION**: This project now operates as a **dual system** combining both established RL Local training with cutting-edge GR00T foundation model integration.
 
-### Current State
-- **Legacy System**: Isaac Gym with PPO training (deprecated but functional)
-- **Target System**: Isaac Sim 5.0.0 + Isaac Lab + GR00T N1.5 foundation model
-- **Migration Focus**: Unitree G1 humanoid robot with keyboard/gamepad teleoperation
+### Current State - Two Complementary Systems
+- **System 1 - RL Local**: Isaac Gym + PPO training (**✅ PRODUCTION READY**)
+- **System 2 - GR00T**: Isaac Sim 5.0.0 + Isaac Lab + GR00T N1.5 foundation model (**🔄 IN DEVELOPMENT**)
+- **Focus**: Unitree G1 humanoid robot with WASD teleoperation on RTX 4070 Super
 
-### New Architecture (Isaac Sim + Isaac Lab)
-- **Simulation**: NVIDIA Isaac Sim 5.0.0 (Omniverse USD-based)
+### System 1 - RL Local (Production Ready)
+- **Status**: ✅ **FULLY OPERATIONAL** - RTX 4070 Super + Ubuntu 24.04
+- **Environment**: Python 3.8.20 + Isaac Gym + PyTorch 2.4.1
+- **Performance**: 989+ episode length, WASD W/S perfect, A/D functional but slow
+- **Current Model**: `Aug12_12-51-21_/model_1110.pt` (WASD_Extended_v0.2)
+- **Next Action**: Continue training 1110 → 5000 iterations to fix A/D curves
+
+### System 2 - GR00T Architecture (In Development)
+- **Simulation**: NVIDIA Isaac Sim 5.0.0 (Omniverse USD-based) ✅ Working
 - **Framework**: Isaac Lab (GPU-accelerated robotics learning)
 - **AI Foundation**: GR00T N1.5 (pre-trained humanoid behaviors)  
-- **Control**: Keyboard teleoperation → Future gamepad integration
+- **Control**: SE(2) teleoperation + Natural language commands
 - **Target Robot**: Unitree G1 humanoid (primary focus)
+- **Status**: STEP 4 ready for execution (Isaac Lab + GR00T integration)
 
-## Development Commands
-
-### Environment Setup - Isaac Sim Migration
+## Development Commands - Dual System
 
 ### 📂 MANDATORY ORGANIZATION STANDARD
 **ALL external repos must be cloned INSIDE `/home/pedro_setubal/Workspaces/unitree_rl/`**
 
-Example isaacgym (already existing):
-- ✅ `/home/pedro_setubal/Workspaces/unitree_rl/isaacgym/`
+Current structure:
+- ✅ `/home/pedro_setubal/Workspaces/unitree_rl/isaacgym/` (System 1)
+- ✅ `/home/pedro_setubal/Workspaces/unitree_rl/local_RL/` (System 1 docs)
+- ✅ `/home/pedro_setubal/Workspaces/unitree_rl/unitree-groot/` (System 2 docs)
+- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/` (System 2)
+- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/Isaac-GR00T/` (System 2)
 
-New repos must follow the same pattern:
-- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/IsaacLab/`
-- 🔄 `/home/pedro_setubal/Workspaces/unitree_rl/Isaac-GR00T/`
-
-#### EXISTING ENVIRONMENT: unitree-rl (USE THIS ONE)
+### System 1 - RL Local Environment (ACTIVE)
 ```bash
-# Use existing environment (DO NOT create new)
-conda activate unitree-rl  # Python 3.8.20 + GLIBC 2.39
+# ALWAYS USE for System 1 (RL Local)
+source ~/anaconda3/etc/profile.d/conda.sh
+conda activate unitree-rl  # Python 3.8.20 + Isaac Gym working
 
-# Install Isaac Sim in existing environment
+# Complete environment setup
+unset PYTHONPATH
+export ISAAC_GYM_ROOT_DIR=/home/pedro_setubal/Workspaces/unitree_rl/isaacgym
+export LD_LIBRARY_PATH="$CONDA_PREFIX/lib:$LD_LIBRARY_PATH"
+export ISAAC_GYM_USE_GPU_PIPELINE=1
+export CUDA_VISIBLE_DEVICES=0
+cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
+```
+
+### System 2 - GR00T Environment Setup
+```bash
+# Use for System 2 (GR00T)
+conda activate unitree-groot  # Python 3.11.13 + Isaac Sim
+
+# Install Isaac Sim (if not already installed)
 pip install "isaacsim[all,extscache]==5.0.0" --extra-index-url https://pypi.nvidia.com
 
 # Isaac Lab from source (INSIDE unitree_rl repo)
@@ -51,37 +72,58 @@ git clone https://github.com/NVIDIA/Isaac-GR00T.git
 cd Isaac-GR00T && pip install -e .
 ```
 
-#### ISAAC GYM SYSTEM (KEEP FOR COMPARISON)
+## System 1 - RL Local Commands (PRODUCTION)
+
+### Current Working Model Testing
 ```bash
-# ✅ FUNCTIONAL - Keep for comparison with GR00T
-conda activate unitree-rl  # Same environment
-cd /home/pedro_setubal/Workspaces/unitree_rl/isaacgym/python/examples/unitree_rl_gym
-# Current WASD model available for tests
+# Test current model (WASD_Extended_v0.2 - A/D slow issue)
+python legged_gym/scripts/play.py --task g1 --load_run Aug12_12-51-21_ --checkpoint 1110 --num_envs 1
+
+# Test production model (for comparison)
+python legged_gym/scripts/play.py --task g1 --load_run Aug12_16-59-06_ --checkpoint 1000 --num_envs 1
 ```
 
-### Isaac Lab Teleoperation + GR00T (MAIN FOCUS)
-
-#### NEW APPROACH: Isaac Lab + GR00T (NO TRAINING)
+### Continue Training (Fix A/D Curves)
 ```bash
-# Activate Isaac Lab environment
-conda activate isaac-lab-groot
+# Phase 1: 500 additional iterations (validation)
+python legged_gym/scripts/train.py --task g1 \
+  --resume --load_run Aug12_12-51-21_ --checkpoint 1110 \
+  --max_iterations 1610 --headless --num_envs 8192
 
-# Isaac Lab teleoperation with keyboard
+# Phase 2: Full convergence (if Phase 1 positive)  
+python legged_gym/scripts/train.py --task g1 \
+  --resume --load_run Aug12_12-51-21_ --checkpoint 1610 \
+  --max_iterations 5000 --headless --num_envs 8192
+```
+
+### TensorBoard Monitoring
+```bash
+# Monitor training progress (separate terminal)
+tensorboard --logdir logs/g1/ --port 6006
+# Focus metric: rew_tracking_ang_vel should grow 0.21 → 0.55+
+```
+
+## System 2 - GR00T Commands (DEVELOPMENT)
+
+### Isaac Sim Testing (Working)
+```bash
+# Launch Isaac Sim UI (tested and working)
+conda activate unitree-groot
+export OMNI_KIT_ACCEPT_EULA=YES
+isaacsim isaacsim.exp.full --reset-user --/exts/isaacsim.ros2.bridge/enabled=false
+```
+
+### Isaac Lab + GR00T Integration (STEP 4)
+```bash
+# Follow complete STEP 4 guide (7 parts A-G)
+# See: unitree-groot/STEP4_G1_TELEOP_AND_GROOT.md
+
+# Isaac Lab teleoperation with keyboard (target)
 cd IsaacLab
-./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Reach-Franka-v0 --teleop_device keyboard
-
-# Target: Unitree G1 teleoperation
 ./isaaclab.sh -p source/standalone/demos/teleoperation.py --task Isaac-Humanoid-Unitree-G1-v0 --teleop_device keyboard
 
-# Isaac Lab + GR00T integration (meta)
+# Isaac Lab + GR00T integration (meta - target)
 ./isaaclab.sh -p scripts/groot_teleop.py --robot unitree_g1 --policy groot_n15 --device keyboard --sim_device cuda
-```
-
-#### DEPRECATED SYSTEM: Isaac Gym (REMOVED)
-```bash
-# ⚠️ COMPLETELY DEPRECATED
-# We no longer use RL/PPO training
-# Only GR00T inference via Isaac Lab
 ```
 
 ### Testing and Visualization
@@ -139,20 +181,21 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 
 ## Architecture
 
-### Directory Structure (Updated for GR00T)
-- **README.md**: Main GR00T + Isaac Sim documentation
-- **CLAUDE.md**: This file - Isaac Lab + GR00T workflow
-- **PLANO_EXECUTIVO_GROOT_WASD.md**: Implementation checklist
-- **MDs/**: Organized documentation
-  - **old_research/**: 🚫 Isaac Gym Era (DEPRECATED)
-    - ***.md**: Isaac Gym + PPO guides  
-    - **salto mortal/**: Jump research
-    - ***.pdf**: Old documents
-  - **README_OLD_RESEARCH.md**: Organization explanation
-- **IsaacLab/**: 🔄 Isaac Lab framework (will be cloned)
-- **Isaac-GR00T/**: 🔄 GR00T N1.5 foundation model (will be cloned)
-- **isaacgym/**: Legacy Isaac Gym system (keep for comparison)
-- **models/**: Isaac Gym models (legacy)
+### Directory Structure (Dual System)
+- **README.md**: Main dual system documentation (both RL Local + GR00T)
+- **CLAUDE.md**: This file - dual system workflow and commands
+- **local_RL/**: System 1 - RL Local documentation and setup guides
+  - **RL_LOCAL_4070_RTX_Setup_Treinamento.md**: Complete setup guide 
+  - **MODEL_REGISTRY.md**: All trained models registry
+  - **README.md**: RL Local system index
+- **unitree-groot/**: System 2 - GR00T documentation and setup guides  
+  - **README.md**: GR00T system documentation (original README)
+  - **STEP4_G1_TELEOP_AND_GROOT.md**: Current development guide
+- **isaacgym/**: System 1 - RL Local Isaac Gym implementation
+- **IsaacLab/**: 🔄 System 2 - Isaac Lab framework (will be cloned)
+- **Isaac-GR00T/**: 🔄 System 2 - GR00T N1.5 foundation model (will be cloned)
+- **models/**: System 1 - Trained models and checkpoints
+- **MDs/**: Historical documentation (pre-dual system)
 
 ### Key Components (GR00T Era)
 
@@ -200,24 +243,30 @@ python deploy/deploy_real/deploy_real.py {network_interface} g1.yaml
 4. **WASD Validation**: User tests W/S/A/D controls visually
 5. **No Training**: Only inference - GR00T has pre-trained behaviors
 
-### GR00T Model Management
-- **Foundation Model**: GR00T N1.5 pre-trained weights
-- **Zero Training**: No checkpoints, no training logs
-- **Isaac Lab Integration**: GR00T as policy backend
-- **Legacy System**: Keep Isaac Gym for comparison
-  - Previous model: `Aug12_16-59-06_/model_1000.pt`
+### Current Status Summary
 
-### GR00T Integration Notes
-- **No Reward Tuning**: GR00T is pre-trained, no reward functions needed
-- **WASD Mapping**: Configure keyboard inputs in Isaac Lab
-  - W/S: Forward/backward locomotion commands
-  - A/D: Left/right turning commands
-- **Task Configuration**: Isaac Lab task setup for Unitree G1
-- **Model Loading**: GR00T N1.5 weights and inference configuration
+#### System 1 - RL Local Status
+- **Environment**: ✅ **FULLY WORKING** - RTX 4070 Super + Python 3.8 + Isaac Gym
+- **Model**: WASD_Extended_v0.2 (1110 iterations) - W/S perfect, A/D slow curves
+- **Issue Identified**: Subtraining - need 5000+ iterations for full convergence  
+- **Solution**: Continue training 1110 → 1610 → 5000 (scientific prediction: 85% success)
+- **Performance**: 989+ episode length, 19.04 mean reward, natural walking
 
-### Dependencies (Updated)
-- **Isaac Sim 5.0.0**: Main simulation platform (via pip)
-- **Isaac Lab**: Teleoperation framework (from source)
-- **GR00T N1.5**: Foundation model (from source)  
-- **PyTorch 2.4.1**: Already installed in unitree-rl
-- **Legacy Isaac Gym**: Kept for comparison
+#### System 2 - GR00T Status  
+- **Isaac Sim**: ✅ **WORKING** - UI stable, physics validated
+- **G1 USD Model**: ✅ **WORKING** - Converted and tested
+- **Current Phase**: STEP 4 - Isaac Lab + GR00T N1.5 integration
+- **Target**: Zero-training foundation model with SE(2) teleoperation + NL commands
+
+### Development Workflow
+1. **System 1 Priority**: Fix A/D curves via extended training (immediate)
+2. **System 2 Development**: Complete STEP 4 Isaac Lab + GR00T integration
+3. **Comparison**: Validate both systems for different use cases
+4. **Documentation**: Maintain both systems documentation in parallel
+
+### Hardware Requirements
+- **GPU**: NVIDIA RTX 4070 Super (verified working both systems)
+- **OS**: Ubuntu 24.04 LTS with X11 session
+- **Driver**: NVIDIA 575.64.03 (stable for both Isaac Gym + Isaac Sim)
+- **RAM**: 32GB recommended (both systems can run concurrently)
+- **Storage**: ~40GB total (Isaac Gym ~15GB + Isaac Sim ~25GB)
